@@ -1,0 +1,26 @@
+
+STEP 0  :  Init Project RN
+
+npx react-native init AwesomeProject
+
+------------------------------------------------------------------------------------------------------------------
+
+STEP 1  :  Install React Navigation
+
+npm install @react-navigation/native
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+npm install @react-navigation/stack
+
+for ios : 
+cd ios; pod install; cd ..
+
+for android : 
+add this code on app/build.gradle
+implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+
+reference : https://reactnavigation.org/docs/hello-react-navigation/
+
+check this libs its work --> look App.js
+
+------------------------------------------------------------------------------------------------------------------
