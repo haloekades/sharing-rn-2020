@@ -24,3 +24,12 @@ reference : https://reactnavigation.org/docs/hello-react-navigation/
 check this libs its work --> look App.js
 
 ------------------------------------------------------------------------------------------------------------------
+
+STEP 2  :  Install Native Base
+
+npm install native-base --save
+react-native link
+
+reference : https://docs.nativebase.io/docs/GetStarted.html
+
+------------------------------------------------------------------------------------------------------------------
