@@ -33,3 +33,10 @@ react-native link
 reference : https://docs.nativebase.io/docs/GetStarted.html
 
 ------------------------------------------------------------------------------------------------------------------
+
+STEP 3  :  Foldering
+
+add folder src/screen
+add per screen etc : splash, login, home
+
+------------------------------------------------------------------------------------------------------------------
