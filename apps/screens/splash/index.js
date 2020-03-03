@@ -21,7 +21,7 @@ export default class Splash extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.navigation.navigate('Auth');
+            this.props.navigation.replace('Auth');
         }, 2000)
     }
 
