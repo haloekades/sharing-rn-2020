@@ -24,9 +24,8 @@ export default class CreateTask extends Component {
         super(props);
     }
 
-    componentDidMount() {
-        let nav = this.props.navigation;
-        let { params } = nav.state;
+    componentDidMount() { 
+        let { params } = this.props.route;
         if (params != null && params.data) {
             this.setState({
                 title : 'Edit Task',

@@ -13,9 +13,8 @@ export default class ApprovalDetail extends Component {
         super(props)
     }
 
-    componentDidMount() {
-        let nav = this.props.navigation;
-        let { params } = nav.state;
+    componentDidMount() { 
+        let { params } = this.props.route;
         if (params != null && params.data) {
             this.setState({ data: params.data })
         }

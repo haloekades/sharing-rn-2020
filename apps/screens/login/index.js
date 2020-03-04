@@ -49,8 +49,7 @@ export default class LoginForm extends Component {
         this.setState({ errorUsername, errorPassword });
 
         if (errorUsername == false && errorPassword == false) {
-            // this.props.navigation.navigate('Main');
-            this.props.navigation.navigate('MainApp');
+            this.props.navigation.replace('MainApp');
         }
     }
 

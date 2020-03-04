@@ -15,9 +15,8 @@ export default class ApprovalList extends Component {
         super(props)
     }
 
-    componentDidMount() {
-        let nav = this.props.navigation;
-        let { params } = nav.state;
+    componentDidMount() { 
+        let { params } = this.props.route;
         if (params != null && params.status != null) {
             // this.initTask(params.status)
             this.getApprovalByStatus(params.status);

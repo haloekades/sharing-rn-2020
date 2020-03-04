@@ -40,7 +40,7 @@ export default class Profile extends Component {
 
     doLogout = async () => {
         await AsyncStorage.setItem("DATA_PROFILE", "")
-        this.props.navigation.navigate('Login')
+        this.props.navigation.replace('Login')
     }
 
 

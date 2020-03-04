@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, RefreshCon
 import { Container, Icon, Card, CardItem, Header, Body, Title, Content, Toast } from "native-base";
 const { width, height } = Dimensions.get('window');
 import { getUser } from "../../utils/api/User"
+import { log } from 'react-native-reanimated';
 
 export default class Feeds extends Component {
 
@@ -35,6 +36,7 @@ export default class Feeds extends Component {
 
 
     componentDidMount() {
+        log('ekades tes')
         this.doGetDataProfile();
     }
 
@@ -42,6 +44,7 @@ export default class Feeds extends Component {
         this.setState({
             isRefreshing: true,
         })
+        log('ekades tes')
         this.doGetDataProfile();
     }
 

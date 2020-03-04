@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import { Container, Text, Left, Header, Body, Icon, Title, Right, Content } from "native-base";
 import { ItemTask } from "../../../components"
@@ -16,24 +16,22 @@ export default class ListTask extends Component {
     }
 
     componentDidMount() {
-        let nav = this.props.navigation;
-        let { params } = nav.state;
+        let { params } = this.props.route;
         if (params != null && params.status) {
-            // this.initTask(params.status)
             this.getTaskByStatus(params.status)
         } else {
             this.getTaskByStatus(null)
         }
     }
 
-    getTaskByStatus = async (status) =>{
+    getTaskByStatus = async (status) => {
         let response = await getUserTasks(status);
 
-        if(response.acknowledge === true){
+        if (response.acknowledge === true) {
             this.setState({
-                taskList : response.data
+                taskList: response.data
             })
-        }else{
+        } else {
             Toast.show({
                 text: response.message,
                 duration: 1000
