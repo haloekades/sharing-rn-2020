@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Image, Dimensions, SafeAreaView } from 'react-native';
 import { Container, Content, Text, Input, Item, Icon, Button } from "native-base";
 
@@ -11,82 +11,66 @@ import myColor from '../../theme/variables/myColor';
 
 const { width, height } = Dimensions.get('window');
 
-export default class LoginForm extends Component {
-    state = {
-        username: '',
-        password: '',
-        showPassword: false,
-        errorUsername: false,
-        errorPassword: false
-    }
-
-    constructor(props) {
-        super(props)
-    }
+export default function LoginForm({navigation}){
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [errorUsername, setErrorUsername] = useState(false);
+    const [errorPassword, setErrorPassword] = useState(false);
 
     onTogglePassword = () => {
-        this.setState({ showPassword: !this.state.showPassword });
+        setShowPassword(!showPassword)
     }
 
     onChangeUsername = (text) => {
-        this.setState({ username: text, errorUsername: !validateEmail(text) })
+        setUsername(text)
+        setErrorUsername(!validateEmail(text))
     }
 
     onChangePassword = (text) => {
-        this.setState({ password: text, errorPassword: text.length < 5 })
+        setPassword(text)
+        setErrorPassword(text.length < 5)
     }
 
     onLogin = async () => {
-        let { 
-            username, password,
-            errorUsername, errorPassword
-        } = this.state;
-        
         // validation
-        errorUsername = _.isEmpty(username);
-        errorPassword = _.isEmpty(password);
+        isErrorUsername = _.isEmpty(username);
+        isErrorPassword = _.isEmpty(password);
 
-        this.setState({ errorUsername, errorPassword });
+        setErrorUsername(isErrorUsername)
+        setErrorPassword(isErrorPassword)
 
-        if (errorUsername == false && errorPassword == false) {
-            this.props.navigation.replace('MainApp');
+        if (isErrorUsername == false && isErrorPassword == false) {
+            navigation.replace('MainApp');
         }
     }
 
-    render() {
-        let { navigation } = this.props
-        let { showPassword, errorUsername, errorPassword } = this.state;
+    return (
+        <Container>
+            <SafeAreaView />
+            <Content>
+            <View>
+                <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
 
-        return (
-            <Container>
-                <SafeAreaView />
-                <Content>
-                <View>
-                    <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
-
-                    <View style={styles.form}>
-                        <Item regular error={errorUsername} style={styles.formItem}>
-                            <Input autoFocus onChangeText={(txt) => this.onChangeUsername(txt)} keyboardType="email-address" placeholder='Input your email'/>
-                            <Icon type="Ionicons" name='md-mail' />
-                        </Item>
-                        <Item regular error={errorPassword} style={styles.formItem}>
-                            <Input secureTextEntry={!showPassword} onChangeText={(txt) => this.onChangePassword(txt)} placeholder='Input your password'/>
-                            <Button iconLeft transparent dark onPress={() => this.onTogglePassword()} style={{height: 50, paddingRight: 8}}>
-                                <Icon type="Ionicons" name='ios-eye' style={{color: errorPassword ? myColor.brandDanger : myColor.brandDark }} />
-                            </Button>
-                        </Item>
-                        <Button danger rounded block onPress={() => this.onLogin()} style={styles.btnLogin}>
-                            <Text>Login</Text>
+                <View style={styles.form}>
+                    <Item regular error={errorUsername} style={styles.formItem}>
+                        <Input autoFocus onChangeText={(txt) => this.onChangeUsername(txt)} keyboardType="email-address" placeholder='Input your email'/>
+                        <Icon type="Ionicons" name='md-mail' />
+                    </Item>
+                    <Item regular error={errorPassword} style={styles.formItem}>
+                        <Input secureTextEntry={!showPassword} onChangeText={(txt) => this.onChangePassword(txt)} placeholder='Input your password'/>
+                        <Button iconLeft transparent dark onPress={() => this.onTogglePassword()} style={{height: 50, paddingRight: 8}}>
+                            <Icon type="Ionicons" name='ios-eye' style={{color: errorPassword ? myColor.brandDanger : myColor.brandDark }} />
                         </Button>
-                        <Button transparent small block onPress={() => navigation.navigate('FPasswordForm')} style={styles.btnForgot}>
-                            <Text>Forgot password?</Text>
-                        </Button>
-                    </View>
+                    </Item>
+                    <Button danger rounded block onPress={() => this.onLogin()} style={styles.btnLogin}>
+                        <Text>Login</Text>
+                    </Button>
                 </View>
-                </Content>
-            </Container>
-        );
-    }
+            </View>
+            </Content>
+        </Container>
+    );
 }
 
 const styles = StyleSheet.create({

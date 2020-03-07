@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { StyleSheet, View, Image, Dimensions, SafeAreaView } from 'react-native';
 import { Container, Text } from "native-base";
 
@@ -9,42 +9,31 @@ import { IMAGES } from "../../assets";
 
 const { width, height } = Dimensions.get('window');
 
-export default class Splash extends Component {
-    state = {
-        username: '',
-        errorUsername: false,
-    }
-
-    constructor(props) {
-        super(props)
-    }
-
-    componentDidMount() {
+export default function Splash({ navigation }) {
+    useEffect(() => {
         setTimeout(() => {
-           this.props.navigation.replace('MainApp');
+            // navigation.replace('Login');
+            navigation.replace('MainApp');
         }, 2000)
-    }
+    }, []);
 
-    render() {
-
-        return (
-            <Container>
-                <SafeAreaView />
-                <View style={{flex: 1}}>
-                    <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
-                    <Text style={styles.loading}>Loading...</Text>
-                    <Text style={styles.version}>Version 1.0</Text>
-                </View>
-            </Container>
-        );
-    }
+    return (
+        <Container>
+            <SafeAreaView />
+            <View style={{ flex: 1 }}>
+                <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
+                <Text style={styles.loading}>Loading...</Text>
+                <Text style={styles.version}>Version 1.0</Text>
+            </View>
+        </Container>
+    );
 }
 
 const styles = StyleSheet.create({
     illustrator: {
-        width: width - (width/4),
-        height: width - (width/4), 
-        marginTop: height/4,
+        width: width - (width / 4),
+        height: width - (width / 4),
+        marginTop: height / 4,
         alignSelf: 'center',
         alignItems: 'flex-start'
     },

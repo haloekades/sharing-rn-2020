@@ -6,7 +6,7 @@ import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
 import { StyleProvider, Root, Container } from "native-base";
 import { Navigator, RootStack } from "./apps/routes";
 import {
-  Splash, LoginForm, RegisterForm, RegisterConfirm, FPasswordForm, FPasswordConfirm,
+  Splash, LoginForm, RegisterForm, RegisterConfirm, FPasswordForm, FPasswordConfirm, Splash2,
   CreateTask, ListTask, TaskDetail, ApprovalList, ApprovalDetail
 } from "./apps/screens";
 import { MainNav } from "./apps/routes/MainRoutes"
@@ -86,10 +86,8 @@ function App() {
               headerShown: false
             }}>
             <StackApp.Screen name="Splash" component={Splash} />
-            {/* <StackApp.Screen name="Auth" component={AuthNav} /> */}
-            {/* <StackApp.Screen name="MainApp" component={MainAppNav} /> */}
-
-
+            <StackApp.Screen name="Splash2" component={Splash2} />
+            
             <StackApp.Screen name="Login" component={LoginForm} />
             <StackApp.Screen name="RegisterForm" component={RegisterForm} />
             <StackApp.Screen name="FPasswordForm" component={FPasswordForm} />

@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Dimensions, SafeAreaView } from 'react-native';
 import { Container, Text } from "native-base";
 
@@ -9,43 +9,34 @@ import { IMAGES } from "../../assets";
 
 const { width, height } = Dimensions.get('window');
 
-export default class Splash2 extends Component {
-    state = {
-        username: '',
-        errorUsername: false,
-    }
+export default function Splash2({ navigation, route }) {
+    const [textSplash, setTextSplash] = useState(route.params.textSplash);
 
-    constructor(props) {
-        super(props)
-    }
+    useEffect(() => {
+        if (textSplash == 'Spalsh 2') {
+            setTextSplash('Splash 3')
+        } else {
+            setTextSplash('Splash 4')
+        }
+    }, []);
 
-    componentDidMount() {
-        setTimeout(() => {
-            // this.props.navigation.navigate('Auth');
-            // this.props.navigation.navigate('MainApp');
-        }, 2000)
-    }
-
-    render() {
-
-        return (
-            <Container>
-                <SafeAreaView />
-                <View style={{flex: 1}}>
-                    <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
-                    <Text style={styles.loading}>SPlash 2</Text>
-                    <Text style={styles.version}>Version 1.0</Text>
-                </View>
-            </Container>
-        );
-    }
+    return (
+        <Container>
+            <SafeAreaView />
+            <View style={{ flex: 1 }}>
+                <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
+                <Text style={styles.loading}>{textSplash}</Text>
+                <Text style={styles.version}>Version 1.0</Text>
+            </View>
+        </Container>
+    );
 }
 
 const styles = StyleSheet.create({
     illustrator: {
-        width: width - (width/4),
-        height: width - (width/4), 
-        marginTop: height/4,
+        width: width - (width / 4),
+        height: width - (width / 4),
+        marginTop: height / 4,
         alignSelf: 'center',
         alignItems: 'flex-start'
     },
