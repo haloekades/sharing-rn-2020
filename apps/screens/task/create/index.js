@@ -1,77 +1,68 @@
 /** @format */
 
-import React, { Component } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import React, { Component, useEffect, useState } from 'react';
+import { StyleSheet, Dimensions, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Button, Card, Item, Input, Toast } from "native-base";
 
 const { height } = Dimensions.get('window');
 
-export default class CreateTask extends Component {
-    state = {
-        title:'Create Task',
-        category: '',
-        name: '',
-        date: '',
-        description: '',
-        errorDate: false,
-        errorCategory: false,
-        errorName: false,
-        errorDescription: false,
+export default function CreateTask({ navigation, route }) {
+    const [title, setTitle] = useState('Create Task');
+    const [category, setCategory] = useState('');
+    const [name, setName] = useState('');
+    const [date, setDate] = useState('');
+    const [description, setDescription] = useState('');
+    const [errorDate, setErrorDate] = useState(false);
+    const [errorCategory, setErrorCategory] = useState(false);
+    const [errorName, setErrorName] = useState(false);
+    const [errorDescription, setErrorDescription] = useState(false);
 
-    }
-
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() { 
-        let { params } = this.props.route;
+    useEffect(() => {
+        let { params } = route;
         if (params != null && params.data) {
-            this.setState({
-                title : 'Edit Task',
-                category : params.data.category,
-                name: params.data.name,
-                date: params.data.date,
-                description: params.data.description,
-                errorDate: false,
-                errorCategory: false,
-                errorName: false,
-                errorDescription: false,
-            })
+            setTitle('Edit Task')
+            setCategory(params.data.category)
+            setName(pparams.data.name)
+            setDate(params.data.date)
+            setDescription(params.data.description)
+            setErrorDate(false)
+            setErrorCategory(false)
+            setErrorName(false)
+            setErrorDescription(false)
         }
+    }, []);
+
+    function onChangeCategory(text){
+        setCategory(text)
+        setErrorCategory(false)
     }
 
-    doBack = () => {
-        this.props.navigation.goBack();
+    function onChangeDate(text){
+        setDate(text)
+        setErrorDate(false)
     }
 
-    onChangeCategory = (text) => {
-        this.setState({ category: text, errorCategory: false })
+    function onChangeTitle(text){
+        setName(text)
+        setErrorName(false)
     }
 
-    onChangeDate = (text) => {
-        this.setState({ date: text, errorDate: false })
+    function onChangeDescription(text){
+        setDescription(text)
+        setErrorDescription(false)
     }
 
-    onChangeTitle = (text) => {
-        this.setState({ name: text, errorName: false })
-    }
-
-    onChangeDescription = (text) => {
-        this.setState({ description: text, errorDescription: false })
-    }
-
-    showToast = (isSuccess) => {
+    function showToast(isSuccess){
         Toast.show({
             text: isSuccess ? "Input data berhasil di simpan" : "Input data gagal di simpan",
             duration: 2000
         });
 
         if (isSuccess)
-            this.doBack()
+            navigation.goBack()
     }
 
-    showAlert = () => {
+    function showAlert(){
         Alert.alert(
             'Konfirmasi',
             'Apakah data yang anda input sudah benar ?',
@@ -83,57 +74,54 @@ export default class CreateTask extends Component {
                 },
                 {
                     text: 'Ya', onPress: () =>
-                        this.showToast(true)
+                        showToast(true)
                 },
             ],
             { cancelable: false },
         );
     }
 
-    render() {
-        let { title, category, name, date, description ,errorName, errorCategory, errorDescription } = this.state;
-
-        return (
-            <Container>
-                <Header noShadow>
-                    <Left style={styles.iconSide}>
-                        <TouchableOpacity onPress={() => this.doBack()}>
-                            <Icon type='AntDesign' name='arrowleft' style={{ color: 'white' }} />
-                        </TouchableOpacity>
-                    </Left>
-                    <Body style={styles.iconBody}>
-                        <Title style={styles.textTitle}>{title}</Title>
-                    </Body>
-                    <Right style={styles.iconSide} />
-                </Header>
-                <Content style={{ padding: 10 }}>
-                    <Card style={{ padding: 16 }}>
-                        <Text style={styles.textField}>Category</Text>
-                        <Item regular error={errorCategory} style={styles.formItem}>
-                            <Input  value={category} autoFocus onChangeText={(txt) => this.onChangeCategory(txt)} keyboardType="default" placeholder='Select Category' />
-                            <Icon type="Entypo" name='chevron-small-down' />
-                        </Item>
-                        <Text style={styles.textField}>Input Date</Text>
-                        <Item regular error={errorCategory} style={styles.formItem}>
-                            <Input value={date} autoFocus onChangeText={(txt) => this.onChangeCategory(txt)} keyboardType="default" placeholder='Input Date' />
-                            <Icon type="Entypo" name='calendar' />
-                        </Item>
-                        <Text style={styles.textField}>Task Name</Text>
-                        <Item regular error={errorName} style={styles.formItem}>
-                            <Input value={name}  autoFocus onChangeText={(txt) => this.onChangeTitle(txt)} keyboardType="default" placeholder='Input Task Name' />
-                        </Item>
-                        <Text style={styles.textField}>Description</Text>
-                        <Item regular error={errorDescription} style={styles.formItem}>
-                            <Input value={description} style={{ height: height / 5 }} autoFocus onChangeText={(txt) => this.onChangeDescription(txt)} keyboardType="default" placeholder='Input Description' />
-                        </Item>
-                    </Card>
-                    <Button onPress={() => this.showAlert()} success rounded block style={styles.btnLogin}>
-                        <Text>SAVE</Text>
-                    </Button>
-                </Content>
-            </Container>
-        );
-    }
+    return (
+        <Container>
+            <SafeAreaView/>
+            <Header noShadow>
+                <Left style={styles.iconSide}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Icon type='AntDesign' name='arrowleft' style={{ color: 'white' }} />
+                    </TouchableOpacity>
+                </Left>
+                <Body style={styles.iconBody}>
+                    <Title style={styles.textTitle}>{title}</Title>
+                </Body>
+                <Right style={styles.iconSide} />
+            </Header>
+            <Content style={{ padding: 10 }}>
+                <Card style={{ padding: 16 }}>
+                    <Text style={styles.textField}>Category</Text>
+                    <Item regular error={errorCategory} style={styles.formItem}>
+                        <Input value={category} autoFocus onChangeText={(txt) => onChangeCategory(txt)} keyboardType="default" placeholder='Select Category' />
+                        <Icon type="Entypo" name='chevron-small-down' />
+                    </Item>
+                    <Text style={styles.textField}>Input Date</Text>
+                    <Item regular error={errorCategory} style={styles.formItem}>
+                        <Input value={date} autoFocus onChangeText={(txt) => onChangeDate(txt)} keyboardType="default" placeholder='Input Date' />
+                        <Icon type="Entypo" name='calendar' />
+                    </Item>
+                    <Text style={styles.textField}>Task Name</Text>
+                    <Item regular error={errorName} style={styles.formItem}>
+                        <Input value={name} autoFocus onChangeText={(txt) => onChangeTitle(txt)} keyboardType="default" placeholder='Input Task Name' />
+                    </Item>
+                    <Text style={styles.textField}>Description</Text>
+                    <Item regular error={errorDescription} style={styles.formItem}>
+                        <Input value={description} style={{ height: height / 5 }} autoFocus onChangeText={(txt) => onChangeDescription(txt)} keyboardType="default" placeholder='Input Description' />
+                    </Item>
+                </Card>
+                <Button onPress={() => showAlert()} success rounded block style={styles.btnLogin}>
+                    <Text>SAVE</Text>
+                </Button>
+            </Content>
+        </Container>
+    );
 }
 
 const styles = StyleSheet.create({

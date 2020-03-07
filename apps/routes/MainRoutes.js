@@ -15,7 +15,7 @@ export function MainNav() {
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => (
-                        <Icon type="AntDesign" name="home" color={color} fontSize={10} style={{margin : 2}}/>
+                        <Icon type="AntDesign" name="home" color={color} fontSize={size} style={{margin : 2}}/>
                     ),
                 }}
             />
@@ -24,7 +24,7 @@ export function MainNav() {
             options={{
                 tabBarLabel: 'History',
                 tabBarIcon: ({ color, size }) => (
-                    <Icon type="AntDesign" name="menuunfold" color={color} fontSize={10} style={{margin : 2}}/>
+                    <Icon type="AntDesign" name="menuunfold" color={color} fontSize={size} style={{margin : 2}}/>
                 ),
             }} />
             <Tab.Screen name="Profile" 
@@ -32,7 +32,7 @@ export function MainNav() {
             options={{
                 tabBarLabel: 'Profile',
                 tabBarIcon: ({ color, size }) => (
-                    <Icon type="AntDesign" name="user" color={color} fontSize={10} style={{margin : 2}}/>
+                    <Icon type="AntDesign" name="user" color={color} fontSize={size} style={{margin : 2}}/>
                 ),
             }}/>
         </Tab.Navigator>

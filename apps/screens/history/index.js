@@ -1,46 +1,36 @@
 /** @format */
 
-import React, { Component } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, FlatList } from 'react-native';
-import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Tab, Tabs, Toast } from "native-base";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import { Container, Header, Body, Title, Content, Tab, Tabs, Toast } from "native-base";
 import { ItemTask, ItemApproval } from '../../components';
 import { getUserTasks, getUserApporval } from '../../utils/api/User'
 
-export default class HistoryTask extends Component {
-    state = {
-        taskList: [],
-        approvalList: [],
+export default function HistoryTask({ navigation }) {
+    const [taskList, setTaskList] = useState([]);
+    const [approvalList, setApprovalList] = useState([]);
+
+    useEffect(() => {
+        getHistoryTask();
+        getHistoryApproval()
+    }, []);
+
+
+    function getHistoryTask() {
+        getTaskApproved();
+        getTaskRejected();
     }
 
-    constructor(props) {
-        super(props)
+    function getHistoryApproval() {
+        getApprovalApproved();
+        getApprovalRejected();
     }
 
-    componentDidMount() {
-        // this.initTask()
-        // this.initApproval()
-        this.getHistoryTask();
-        this.getHistoryApproval()
-
-    }
-
-    getHistoryTask = () => {
-        this.getTaskApproved();
-        this.getTaskRejected();
-    }
-
-    getHistoryApproval = () => {
-        this.getApprovalApproved();
-        this.getApprovalRejected();
-    }
-
-    getTaskApproved = async () => {
+    async function getTaskApproved() {
         let response = await getUserTasks("APPROVED");
         if (response.acknowledge === true) {
-            this.setState({
-                taskList : [...this.state.taskList,...response.data]
-            })
-        }else{
+            setTaskList([...taskList, ...response.data])
+        } else {
             Toast.show({
                 text: response.message,
                 duration: 1000
@@ -48,13 +38,11 @@ export default class HistoryTask extends Component {
         }
     }
 
-    getTaskRejected = async () => {
+    async function getTaskRejected() {
         let response = await getUserTasks("REJECTED");
         if (response.acknowledge === true) {
-            this.setState({
-                taskList : [...this.state.taskList,...response.data]
-            })
-        }else{
+            setTaskList([...taskList, ...response.data])
+        } else {
             Toast.show({
                 text: response.message,
                 duration: 1000
@@ -62,13 +50,11 @@ export default class HistoryTask extends Component {
         }
     }
 
-    getApprovalApproved = async () => {
+    async function getApprovalApproved() {
         let response = await getUserApporval("APPROVED");
         if (response.acknowledge === true) {
-            this.setState({
-                approvalList : [...this.state.approvalList,...response.data]
-            })
-        }else{
+            setApprovalList([...approvalList, ...response.data])
+        } else {
             Toast.show({
                 text: response.message,
                 duration: 1000
@@ -76,13 +62,11 @@ export default class HistoryTask extends Component {
         }
     }
 
-    getApprovalRejected = async () => {
+    async function getApprovalRejected() {
         let response = await getUserApporval("REJECTED");
         if (response.acknowledge === true) {
-            this.setState({
-                approvalList : [...this.state.approvalList,...response.data]
-            })
-        }else{
+            setApprovalList([...approvalList, ...response.data])
+        } else {
             Toast.show({
                 text: response.message,
                 duration: 1000
@@ -90,109 +74,63 @@ export default class HistoryTask extends Component {
         }
     }
 
-
-    initTask() {
-        let data = [];
-
-        for (let i = 4; i <= 12; i++) {
-            let item = {
-                category: i < 2 ? 'Perawatan' : i < 7 ? 'Sewa' : 'Pengadaan',
-                name: 'Nama Task ' + i,
-                description: 'Ini Description ' + i,
-                date: i + ' Feb 2019',
-                status: i < 4 ? 'PENDING' : i < 10 ? 'APPROVED' : 'REJECTED',
-                approvedName: 'Dr. Mulyadi',
-                approvedDate: i + ' Dec 2019',
-                notes: 'Semoga bisa lebih baik lagi'
-            }
-
-            data.push(item)
-        }
-
-        this.setState({ taskList: data })
-    }
-
-
-    initApproval() {
-        let data = [];
-
-        for (let i = 4; i <= 12; i++) {
-            let item = {
-                category: i < 2 ? 'Perawatan' : i < 7 ? 'Sewa' : 'Pengadaan',
-                name: 'Nama Task ' + i,
-                description: 'Ini Description ' + i,
-                date: i + ' Feb 2019',
-                status: i < 4 ? 'PENDING' : i < 10 ? 'APPROVED' : 'REJECTED',
-                approvedName: 'Dr. Mulyadi',
-                approvedDate: i + ' Dec 2019',
-                notes: 'Semoga bisa lebih baik lagi',
-                requestName: 'Didi Kempot'
-            }
-
-            data.push(item)
-        }
-
-        this.setState({ approvalList: data })
-    }
-
-
-
-    gotoTaskDetail = (data) => {
-        if (data != null)
-            this.props.navigation.push('TaskDetail', {
+    function gotoTaskDetail(data) {
+        if (data != null) {
+            navigation.push('TaskDetail', {
                 data: data
             });
+        }
     }
 
-    _renderItemTask = ({ item }) => {
+    function _renderItemTask ({ item }){
         return (
-            <ItemTask data={item} onClickItem={this.gotoTaskDetail} />
+            <ItemTask data={item} onClickItem={gotoTaskDetail} />
         )
     }
 
-    gotoApprovalDetail = (data) => {
-        if (data != null)
-            this.props.navigation.push('ApprovalDetail', {
-                data: data
-            });
+    function gotoApprovalDetail (data){
+        if (data != null){
+            navigation.push('ApprovalDetail', {
+                    data: data
+                });
+        }
     }
 
-    _renderItemApproval = ({ item }) => {
+    function _renderItemApproval ({ item }){
         return (
-            <ItemApproval data={item} onClickItem={this.gotoApprovalDetail} />
+            <ItemApproval data={item} onClickItem={gotoApprovalDetail} />
         )
     }
 
+    return (
+        <Container>
+            <SafeAreaView/>
+            <Header noShadow>
+                <Body style={{ paddingHorizontal: 16 }}>
+                    <Title style={styles.textTitle}>HISTORY</Title>
+                </Body>
+            </Header>
+            <Tabs>
+                <Tab heading="Task">
+                    <Content>
+                        <FlatList
+                            style={{ paddingHorizontal: 10 }}
+                            data={taskList}
+                            renderItem={_renderItemTask} />
+                    </Content>
+                </Tab>
+                <Tab heading="Approval">
+                    <Content>
+                        <FlatList
+                            style={{ paddingHorizontal: 10 }}
+                            data={approvalList}
+                            renderItem={_renderItemApproval} />
+                    </Content>
+                </Tab>
+            </Tabs>
+        </Container>
+    );
 
-    render() {
-        return (
-            <Container>
-                <Header noShadow>
-                    <Body style={{ paddingHorizontal: 16 }}>
-                        <Title style={styles.textTitle}>HISTORY</Title>
-                    </Body>
-                </Header>
-                <Tabs>
-                    <Tab heading="Task">
-                        <Content>
-                            <FlatList
-                                style={{ paddingHorizontal: 10 }}
-                                data={this.state.taskList}
-                                renderItem={this._renderItemTask} />
-                        </Content>
-                    </Tab>
-                    <Tab heading="Approval">
-                        <Content>
-                            <FlatList
-                                style={{ paddingHorizontal: 10 }}
-                                data={this.state.approvalList}
-                                renderItem={this._renderItemApproval} />
-                        </Content>
-                    </Tab>
-                </Tabs>
-            </Container>
-        );
-    }
 }
 
 const styles = StyleSheet.create({

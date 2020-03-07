@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, AsyncStorage, SafeAreaView } from 'react-native';
 import { Container, Header, Body, Title, Content, Icon, Card, CardItem } from "native-base";
 
 export default class Profile extends Component {
@@ -60,6 +60,7 @@ export default class Profile extends Component {
 
         return (
             <Container>
+                <SafeAreaView/>
                 <Header noShadow>
                     <Body style={{ paddingHorizontal: 16 }}>
                         <Title style={styles.textTitle}>PROFILE</Title>
@@ -67,7 +68,6 @@ export default class Profile extends Component {
                 </Header>
                 <Content style={styles.container}>
                     <View style={styles.mainView}>
-                        {/* <Icon style={styles.imageProfile} type='AntDesign' name='github' /> */}
                         <Image source={{ uri: avatar }}
                             style={styles.imageProfile} />
                         <Card style={{ marginTop: 25 }}>

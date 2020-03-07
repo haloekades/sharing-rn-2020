@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, RefreshControl, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, RefreshControl, AsyncStorage, SafeAreaView } from 'react-native';
 import { Container, Icon, Card, CardItem, Header, Body, Title, Content, Toast } from "native-base";
 const { width, height } = Dimensions.get('window');
 import { getUser } from "../../utils/api/User"
@@ -45,14 +45,6 @@ export default function Feeds({ navigation }) {
                 approved: response.data.approval.approved,
                 rejected: response.data.approval.rejected,
             }
-
-            // this.setState({
-            //     avatar: response.data.avatar,
-            //     name: response.data.name,
-            //     department: response.data.department,
-            //     task: task,
-            //     approval: approval
-            // })
 
             setAvatar(response.data.avatar)
             setName(response.data.name)
@@ -133,6 +125,7 @@ export default function Feeds({ navigation }) {
 
     return (
         <Container>
+            <SafeAreaView/>
             <Header noShadow>
                 <Body style={{ paddingHorizontal: 16 }}>
                     <Title style={styles.textTitle}>HOME</Title>

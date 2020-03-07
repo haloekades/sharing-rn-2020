@@ -2,10 +2,6 @@ export { default as Splash } from './splash';
 export { default as Splash2 } from './splash2';
 
 export { default as LoginForm } from './login';
-export { default as RegisterForm } from './register/RegisterForm';
-export { default as RegisterConfirm } from './register/RegisterConfirm';
-export { default as FPasswordForm } from './fpassword/FPasswordForm';
-export { default as FPasswordConfirm } from './fpassword/FPasswordConfirm';
 
 export { default as Home } from './home';
 export { default as Profile } from './profile';

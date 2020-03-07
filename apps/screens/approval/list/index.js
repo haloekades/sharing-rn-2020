@@ -1,39 +1,30 @@
 /** @format */
 
-import React, { Component } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, FlatList } from 'react-native';
-import { Container, Text, Left, Header, Body, Icon, Title, Right, Content } from "native-base";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { Container, Left, Header, Body, Icon, Title, Right, Content } from "native-base";
 import { ItemApproval } from '../../../components';
 import { getUserApporval } from "../../../utils/api/User"
 
-export default class ApprovalList extends Component {
-    state = {
-        approvalList:[]
-    }
+export default function ApprovalList({ navigation, route }) {
+    const [approvalList, setApprovalList] = useState([]);
 
-    constructor(props) {
-        super(props)
-    }
-
-    componentDidMount() { 
-        let { params } = this.props.route;
+    useEffect(() => {
+        let { params } = route;
         if (params != null && params.status != null) {
-            // this.initTask(params.status)
-            this.getApprovalByStatus(params.status);
+            getApprovalByStatus(params.status);
         } else {
-            // this.initTask(null)
-            this.getApprovalByStatus(null);
+            getApprovalByStatus(null);
         }
-    }
+    }, []);
 
-    getApprovalByStatus = async (status) =>{
+
+    async function getApprovalByStatus (status){
         let response = await getUserApporval(status);
 
-        if(response.acknowledge === true){
-            this.setState({
-                approvalList : response.data
-            })
-        }else{
+        if (response.acknowledge === true) {
+            setApprovalList(response.data)
+        } else {
             Toast.show({
                 text: response.message,
                 duration: 1000
@@ -41,83 +32,42 @@ export default class ApprovalList extends Component {
         }
     }
 
-    initTask(status) {
-        let data = [];
-        let min = 1;
-        let max = 12
-
-        if (status != null) {
-            if (status == 'PENDING') {
-                min = 1;
-                max = 3;
-            } else if (status == 'APPROVED') {
-                min = 4;
-                max = 9;
-            } else if (status == 'REJECTED') {
-                min = 10;
-                max = 12;
-            }
-        }
-
-        for (let i = min; i <= max; i++) {
-            let item = {
-                category: i < 2 ? 'Perawatan' : i < 7 ? 'Sewa' : 'Pengadaan',
-                name: 'Nama Task ' + i,
-                description: 'Ini Description ' + i,
-                date: i + ' Feb 2019',
-                status: i < 4 ? 'PENDING' : i < 10 ? 'APPROVED' : 'REJECTED',
-                approvedName: 'Dr. Mulyadi',
-                approvedDate: i + ' Dec 2019',
-                notes: 'Semoga bisa lebih baik lagi',
-                requestName: 'Didi Kempot'
-            }
-
-            data.push(item)
-        }
-
-        this.setState({ approvalList: data })
-    }
-
-    doBack = () => {
-        this.props.navigation.goBack();
-    }
-
-    gotoApprovalDetail = (data) => {
-        if (data != null)
-            this.props.navigation.push('ApprovalDetail', {
+    function gotoApprovalDetail(data){
+        if (data != null){
+            navigation.push('ApprovalDetail', {
                 data: data
             });
+        }
     }
 
-    _renderItem =({item}) =>{
+    function _renderItem ({ item }) {
         return (
-            <ItemApproval data={item} onClickItem={this.gotoApprovalDetail} />
+            <ItemApproval data={item} onClickItem={gotoApprovalDetail} />
         )
     }
 
-    render() {
-        return (
-            <Container>
-                <Header noShadow>
-                    <Left style={styles.iconSide}>
-                        <TouchableOpacity onPress={() => this.doBack()}>
-                            <Icon type='AntDesign' name='arrowleft' style={{ color: 'white' }} />
-                        </TouchableOpacity>
-                    </Left>
-                    <Body style={styles.iconBody}>
-                        <Title style={styles.textTitle}>Approval List</Title>
-                    </Body>
-                    <Right style={styles.iconSide} />
-                </Header>
-                <Content>
-                    <FlatList
-                        style={{ paddingHorizontal: 10 }}
-                        data={this.state.approvalList}
-                        renderItem={this._renderItem} />
-                </Content>
-            </Container>
-        );
-    }
+    return (
+        <Container>
+            <SafeAreaView/>
+            <Header noShadow>
+                <Left style={styles.iconSide}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Icon type='AntDesign' name='arrowleft' style={{ color: 'white' }} />
+                    </TouchableOpacity>
+                </Left>
+                <Body style={styles.iconBody}>
+                    <Title style={styles.textTitle}>Approval List</Title>
+                </Body>
+                <Right style={styles.iconSide} />
+            </Header>
+            <Content>
+                <FlatList
+                    style={{ paddingHorizontal: 10 }}
+                    data={approvalList}
+                    renderItem={_renderItem} />
+            </Content>
+        </Container>
+    )
 }
 
 const styles = StyleSheet.create({
