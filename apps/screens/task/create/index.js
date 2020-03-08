@@ -2,27 +2,52 @@
 
 import React, { Component, useEffect, useState } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
-import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Button, Card, Item, Input, Toast } from "native-base";
+import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Button, Card, Item, Input, Toast, Picker, Form, View, DatePicker } from "native-base";
+import moment from 'moment';
 
 const { height } = Dimensions.get('window');
 
 export default function CreateTask({ navigation, route }) {
     const [title, setTitle] = useState('Create Task');
     const [category, setCategory] = useState('');
+    const [categoryDescription, setCategoryDescription] = useState('');
     const [name, setName] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(moment());
     const [description, setDescription] = useState('');
     const [errorDate, setErrorDate] = useState(false);
     const [errorCategory, setErrorCategory] = useState(false);
     const [errorName, setErrorName] = useState(false);
     const [errorDescription, setErrorDescription] = useState(false);
 
+    const categoryList = [
+        {
+            key: 'pengadaan',
+            label: 'Pengadaan'
+        },
+        {
+            key: 'perawatan',
+            label: 'Perawatan'
+        },
+        {
+            key: 'pengurangan',
+            label: 'Pengurangan'
+        },
+        {
+            key: 'transportasi',
+            label: 'Transportasi'
+        },
+        {
+            key: 'sewa',
+            label: 'Sewa'
+        },
+    ]
+
     useEffect(() => {
         let { params } = route;
         if (params != null && params.data) {
             setTitle('Edit Task')
             setCategory(params.data.category)
-            setName(pparams.data.name)
+            setName(params.data.name)
             setDate(params.data.date)
             setDescription(params.data.description)
             setErrorDate(false)
@@ -32,27 +57,22 @@ export default function CreateTask({ navigation, route }) {
         }
     }, []);
 
-    function onChangeCategory(text){
-        setCategory(text)
-        setErrorCategory(false)
-    }
-
-    function onChangeDate(text){
+    function onChangeDate(text) {
         setDate(text)
         setErrorDate(false)
     }
 
-    function onChangeTitle(text){
+    function onChangeTitle(text) {
         setName(text)
         setErrorName(false)
     }
 
-    function onChangeDescription(text){
+    function onChangeDescription(text) {
         setDescription(text)
         setErrorDescription(false)
     }
 
-    function showToast(isSuccess){
+    function showToast(isSuccess) {
         Toast.show({
             text: isSuccess ? "Input data berhasil di simpan" : "Input data gagal di simpan",
             duration: 2000
@@ -62,7 +82,7 @@ export default function CreateTask({ navigation, route }) {
             navigation.goBack()
     }
 
-    function showAlert(){
+    function showAlert() {
         Alert.alert(
             'Konfirmasi',
             'Apakah data yang anda input sudah benar ?',
@@ -81,9 +101,31 @@ export default function CreateTask({ navigation, route }) {
         );
     }
 
+    function onValueChange(value) {
+        setCategory(value)
+
+        let category = categoryList.find(data => data.key == value)
+        if (category != null) {
+            setCategoryDescription(category.label)
+        }
+    }
+
+    function renderCategoryList() {
+        if (categoryList != null && categoryList.length > 0) {
+            return (categoryList.map(value => {
+                return (<Picker.Item label={value.label} value={value.key} />
+                )
+            }))
+        }
+    }
+
+    function onSelectedDate(newDate) {
+        setDate(newDate)
+    }
+
     return (
         <Container>
-            <SafeAreaView/>
+            <SafeAreaView />
             <Header noShadow>
                 <Left style={styles.iconSide}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -98,14 +140,40 @@ export default function CreateTask({ navigation, route }) {
             <Content style={{ padding: 10 }}>
                 <Card style={{ padding: 16 }}>
                     <Text style={styles.textField}>Category</Text>
-                    <Item regular error={errorCategory} style={styles.formItem}>
-                        <Input value={category} autoFocus onChangeText={(txt) => onChangeCategory(txt)} keyboardType="default" placeholder='Select Category' />
-                        <Icon type="Entypo" name='chevron-small-down' />
+                    <Item regular error={errorCategory}
+                        style={styles.itemPicker}>
+                        <View style={{ flex: 1 }}>
+                            <Picker
+                                note
+                                mode="dialog"
+                                placeholder='Select Category'
+                                placeholderIconColor='black'
+                                iosIcon={<Icon name="arrow-down" />}
+                                style={{ width: '100%' }}
+                                textStyle={{ color: "black" }}
+                                selectedValue={category}
+                                onValueChange={onValueChange.bind(this)}>
+                                {renderCategoryList()}
+                            </Picker>
+                        </View>
                     </Item>
                     <Text style={styles.textField}>Input Date</Text>
-                    <Item regular error={errorCategory} style={styles.formItem}>
-                        <Input value={date} autoFocus onChangeText={(txt) => onChangeDate(txt)} keyboardType="default" placeholder='Input Date' />
+                    <Item regular error={errorCategory} style={styles.itemPicker}>
                         <Icon type="Entypo" name='calendar' />
+                        <View style={{ flex: 1 }}>
+                            <DatePicker
+                                defaultDate={new Date(2018, 4, 4)}
+                                minimumDate={new Date(2020, 1, 1)}
+                                maximumDate={new Date(2020, 12, 31)}
+                                locale={"en"}
+                                formatChosenDate={date => {
+                                    return moment(date).format('DD MMM YYYY')
+                                }}
+                                placeHolderText="Select date"
+                                placeHolderTextStyle={{ color: "#d3d3d3" }}
+                                onDateChange={onSelectedDate}
+                            />
+                        </View>
                     </Item>
                     <Text style={styles.textField}>Task Name</Text>
                     <Item regular error={errorName} style={styles.formItem}>
@@ -145,5 +213,11 @@ const styles = StyleSheet.create({
     },
     btnLogin: {
         marginTop: 10,
+    },
+    itemPicker: {
+        marginVertical: 10,
+        borderRadius: 10,
+        flex: 1,
+        flexDirection: 'row-reverse'
     }
 });
