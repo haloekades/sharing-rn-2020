@@ -33,7 +33,7 @@ export default function LoginForm({ navigation }) {
         setErrorPassword(text.length < 5)
     }
 
-    onLogin = async () => {
+    async function onLogin() {
         // validation
         isErrorUsername = _.isEmpty(username);
         isErrorPassword = _.isEmpty(password);
@@ -51,7 +51,19 @@ export default function LoginForm({ navigation }) {
         const params = {
             email: username,
             password: password
+
+            // name: 'Pengadaan Alat Berat 4',
+            // description: 'Pengadaan Alat Berat 4',
+            // request_date: '2020-03-07',
+            // assign_user: 3,
+            // //response_date:
+            // response_user: 2,
+            // //response_message:
+            // category: 'PENGADAAN',
+            // status: 'W',
         }
+
+
 
         let response = await loginUser(params);
 
@@ -76,7 +88,7 @@ export default function LoginForm({ navigation }) {
                                 <Icon type="Ionicons" name='ios-eye' style={{ color: errorPassword ? myColor.brandDanger : myColor.brandDark }} />
                             </Button>
                         </Item>
-                        <Button danger rounded block onPress={() => this.onLogin()} style={styles.btnLogin}>
+                        <Button danger rounded block onPress={() => onLogin()} style={styles.btnLogin}>
                             <Text>Login</Text>
                         </Button>
                     </View>

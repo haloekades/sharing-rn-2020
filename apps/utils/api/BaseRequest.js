@@ -23,14 +23,37 @@ const API_CALL = async option => {
     // const TOKEN = await AsyncStorage.getItem(authToken);
     // adding the authentication token
 
+
+    var formBody = [];
+    if (option.params) {
+        for (var property in option.params) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(option.params[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
+    }
+
     const API_OPTION = {
       baseURL: BASE_URL,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'Authorization': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMsImlhdCI6MTU4MzcwOTExNX0.zHzfW10HHFILiHU6Jv2ZRMiU2QM88H7ePQ7LqXiKNYs`
       },
+      data : formBody,
       ...option,
     };
+
+
+    // var formBody = [];
+    // if (options.params) {
+    //     for (var property in params) {
+    //         var encodedKey = encodeURIComponent(property);
+    //         var encodedValue = encodeURIComponent(params[property]);
+    //         formBody.push(encodedKey + "=" + encodedValue);
+    //     }
+    //     formBody = formBody.join("&");
+    // }
 
     console.log('base req', API_OPTION)
     const res = await axios.request(API_OPTION);

@@ -7,7 +7,7 @@ export const loginUser = async (params) => {
     const option = {
         method: 'POST',
         url: `${API.login}`,
-        data: params
+        params: params
       };
 
       const userResponse = await API_CALL(option);
