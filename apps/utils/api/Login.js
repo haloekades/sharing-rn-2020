@@ -5,7 +5,7 @@ export * from './Handler';
 export const loginUser = async (params) => {
     try {
     const option = {
-        method: 'post',
+        method: 'POST',
         url: `${API.login}`,
         data: params
       };

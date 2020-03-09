@@ -12,7 +12,7 @@ import myColor from '../../theme/variables/myColor';
 const { width, height } = Dimensions.get('window');
 import { loginUser } from "../../utils/api/Login"
 
-export default function LoginForm({navigation}){
+export default function LoginForm({ navigation }) {
     const [username, setUsername] = useState("admin@gmail.com");
     const [password, setPassword] = useState("12345");
     const [showPassword, setShowPassword] = useState(false);
@@ -47,10 +47,10 @@ export default function LoginForm({navigation}){
         }
     }
 
-    async function doLogin(username, password){
-        let params = {
-            email : username,
-            password : password
+    async function doLogin(username, password) {
+        const params = {
+            email: username,
+            password: password
         }
 
         let response = await loginUser(params);
@@ -62,25 +62,25 @@ export default function LoginForm({navigation}){
         <Container>
             <SafeAreaView />
             <Content>
-            <View>
-                <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
+                <View>
+                    <Image source={IMAGES.drilling} resizeMode='contain' style={styles.illustrator} />
 
-                <View style={styles.form}>
-                    <Item regular error={errorUsername} style={styles.formItem}>
-                        <Input autoFocus onChangeText={(txt) => this.onChangeUsername(txt)} keyboardType="email-address" placeholder='Input your email'/>
-                        <Icon type="Ionicons" name='md-mail' />
-                    </Item>
-                    <Item regular error={errorPassword} style={styles.formItem}>
-                        <Input secureTextEntry={!showPassword} onChangeText={(txt) => this.onChangePassword(txt)} placeholder='Input your password'/>
-                        <Button iconLeft transparent dark onPress={() => this.onTogglePassword()} style={{height: 50, paddingRight: 8}}>
-                            <Icon type="Ionicons" name='ios-eye' style={{color: errorPassword ? myColor.brandDanger : myColor.brandDark }} />
+                    <View style={styles.form}>
+                        <Item regular error={errorUsername} style={styles.formItem}>
+                            <Input autoFocus onChangeText={(txt) => this.onChangeUsername(txt)} keyboardType="email-address" placeholder='Input your email' />
+                            <Icon type="Ionicons" name='md-mail' />
+                        </Item>
+                        <Item regular error={errorPassword} style={styles.formItem}>
+                            <Input secureTextEntry={!showPassword} onChangeText={(txt) => this.onChangePassword(txt)} placeholder='Input your password' />
+                            <Button iconLeft transparent dark onPress={() => this.onTogglePassword()} style={{ height: 50, paddingRight: 8 }}>
+                                <Icon type="Ionicons" name='ios-eye' style={{ color: errorPassword ? myColor.brandDanger : myColor.brandDark }} />
+                            </Button>
+                        </Item>
+                        <Button danger rounded block onPress={() => this.onLogin()} style={styles.btnLogin}>
+                            <Text>Login</Text>
                         </Button>
-                    </Item>
-                    <Button danger rounded block onPress={() => this.onLogin()} style={styles.btnLogin}>
-                        <Text>Login</Text>
-                    </Button>
+                    </View>
                 </View>
-            </View>
             </Content>
         </Container>
     );
@@ -93,14 +93,14 @@ const styles = StyleSheet.create({
         left: 25
     },
     illustrator: {
-        width: width - (width/4),
-        height: width - (width/4), 
-        marginTop: height/8,
+        width: width - (width / 4),
+        height: width - (width / 4),
+        marginTop: height / 8,
         alignSelf: 'center',
         alignItems: 'flex-start'
     },
     form: {
-        marginTop: height/8,
+        marginTop: height / 8,
         marginHorizontal: 25
     },
     formItem: {
