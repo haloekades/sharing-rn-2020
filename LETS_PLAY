@@ -1,0 +1,58 @@
+
+
+STEP 1 : Instal project
+
+npx react-native init AwesomeProject 
+
+run 
+android : react-native run-android
+ios     : react-native run-ios
+
+________________________________________________________________________________________________________________________________
+
+STEP 2 : Instal reactnavigation
+
+npm install @react-navigation/native
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+npm install @react-navigation/stack
+npm install @react-navigation/native @react-navigation/compat
+npm install @react-navigation/bottom-tabs
+
+for ios : 
+cd ios; pod install; cd ..
+
+for android : 
+add this code on app/build.gradle
+implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+
+reference : https://reactnavigation.org/docs/hello-react-navigation/
+
+run 
+android : react-native run-android
+ios     : react-native run-ios
+
+________________________________________________________________________________________________________________________________
+
+STEP 3 : Install Native Base
+
+npm install native-base --save
+react-native link
+
+reference : https://docs.nativebase.io/docs/GetStarted.html
+
+________________________________________________________________________________________________________________________________
+
+STEP 4 : Install axios
+
+yarn add axios
+
+reference : https://www.npmjs.com/package/axios
+
+________________________________________________________________________________________________________________________________
+
+STEP 5 : Install moment
+
+npm install moment --save
+
+________________________________________________________________________________________________________________________________

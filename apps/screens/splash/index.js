@@ -12,8 +12,8 @@ const { width, height } = Dimensions.get('window');
 export default function Splash({ navigation }) {
     useEffect(() => {
         setTimeout(() => {
-            // navigation.replace('Login');
-            navigation.replace('MainApp');
+            navigation.replace('Login');
+            // navigation.replace('MainApp');
         }, 2000)
     }, []);
 

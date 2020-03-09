@@ -1,10 +1,10 @@
-// export const BASE_URL   = `https://jsonplaceholder.typicode.com`;
-export const BASE_URL = 'http://www.mocky.io';
+export const BASE_URL   = `http://approval.rahmat1929.net`;
+// export const BASE_URL = 'http://www.mocky.io';
 export const API_URL    = BASE_URL;
 export const API        = {
     //user
-    // users: `${API_URL}/users`,
-    users: `/v2/5e3e360b33000080008b09a7`,
+    users: `/1.0/user/profile`,
+    // users: `/v2/5e3e360b33000080008b09a7`,
 
     //task
     allTask: `/v2/5e3e2ca033000080008b0993`,
@@ -17,5 +17,7 @@ export const API        = {
     pendingApproval: `/v2/5e3e32b33300006e008b09a2`,
     approvedApproval: `/v2/5e3e323e330000e7068b09a1`,
     rejectedApproval: `/v2/5e3e320e330000e7068b09a0`,
+
+    login: `/1.0/user/login`,
 
 }

@@ -11,6 +11,7 @@ export const getUser = async () => {
 
       const userResponse = await API_CALL(option);
 
+      console.log('user response', userResponse)
       return userResponse;
     } catch (error) {
         return error;

@@ -10,10 +10,11 @@ import { validateEmail } from '../../utils/Common';
 import myColor from '../../theme/variables/myColor';
 
 const { width, height } = Dimensions.get('window');
+import { loginUser } from "../../utils/api/Login"
 
 export default function LoginForm({navigation}){
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("admin@gmail.com");
+    const [password, setPassword] = useState("12345");
     const [showPassword, setShowPassword] = useState(false);
     const [errorUsername, setErrorUsername] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
@@ -41,8 +42,20 @@ export default function LoginForm({navigation}){
         setErrorPassword(isErrorPassword)
 
         if (isErrorUsername == false && isErrorPassword == false) {
-            navigation.replace('MainApp');
+            // navigation.replace('MainApp');
+            doLogin(username, password)
         }
+    }
+
+    async function doLogin(username, password){
+        let params = {
+            email : username,
+            password : password
+        }
+
+        let response = await loginUser(params);
+
+        console.log('login res', response)
     }
 
     return (
