@@ -2,7 +2,7 @@
 
 import React, { Component, useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
-import { Container, Text, Left, Header, Body, Icon, Title, Right, Content } from "native-base";
+import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Toast } from "native-base";
 import { ItemTask } from "../../../components"
 import { getUserTasks } from "../../../utils/api/User"
 
@@ -20,10 +20,12 @@ export default function ApprovalList({ navigation, route }) {
     }, []);
 
     async function getTaskByStatus(status) {
+        console.log('status', status)
         let response = await getUserTasks(status);
+        console.log('task', response)
 
         if (response.acknowledge === true) {
-            setTaskList(response.data)
+            setTaskList(response.result)
         } else {
             Toast.show({
                 text: response.message,

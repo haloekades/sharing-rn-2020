@@ -10,6 +10,7 @@ export const loginUser = async (params) => {
         params: params
       };
 
+      console.log('option login', option)
       const userResponse = await API_CALL(option);
 
       return userResponse;

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Card, CardItem } from 'native-base'
+import moment from 'moment';
 
 export default class ItemTask extends Component {
 
@@ -10,22 +11,26 @@ export default class ItemTask extends Component {
         super(props);
     }
 
-    onClickItem = (data) =>{
+    onClickItem = () => {
         this.props.onClickItem(this.props.data)
     }
 
     render() {
-        let bgStatus = this.props.data.status == 'APPROVED' ? 'green' : this.props.data.status == 'REJECTED' ? 'red' : 'orange'
-        let shownDateStatus = this.props.data.status == 'APPROVED' || this.props.data.status == 'REJECTED' ? this.props.data.approvedDate : ''
+        let bgStatus = this.props.data.status == 'A' ? 'green' : this.props.data.status == 'R' ? 'red' : 'orange'
+        let shownDateStatus = this.props.data.status == 'A' || this.props.data.status == 'R' ?
+            moment(this.props.data.response_date).utc().format("DD MMM YYYY") : ''
+
+        let dayRequest = moment(this.props.data.request_date).utc().format("DD")
+        let monthRequest = moment(this.props.data.request_date).utc().format("MMM")
 
         return (
             <Card style={{ marginTop: 10, marginVertical: 5 }}>
                 <CardItem>
-                    <TouchableOpacity onPress={() => this.onClickItem(this.props.data)} style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => this.onClickItem()} style={{ flexDirection: 'row' }}>
                         <View style={{ flex: 0.2 }}>
                             <View style={styles.viewDate}>
-                                <Text style={{ fontSize: 16, color: 'white' }}>03</Text>
-                                <Text style={{ fontSize: 12, color: 'white' }}>Jan</Text>
+                                <Text style={{ fontSize: 16, color: 'white' }}>{dayRequest}</Text>
+                                <Text style={{ fontSize: 12, color: 'white' }}>{monthRequest}</Text>
                             </View>
                         </View>
                         <View style={{ flex: 0.8, marginLeft: 10 }}>
@@ -37,8 +42,8 @@ export default class ItemTask extends Component {
                             </View>
                             <Text style={{ fontSize: 12, marginTop: 5, alignSelf: 'flex-end' }}>{shownDateStatus}</Text>
                             <View style={[styles.viewReverse, { marginTop: 5 }]}>
-                                {(this.props.data.status == 'APPROVED' || this.props.data.status == 'REJECTED') &&
-                                    <Text style={{ fontSize: 12 }}>by : {this.props.data.approvedName}</Text>
+                                {(this.props.data.status == 'A' || this.props.data.status == 'R') &&
+                                    <Text style={{ fontSize: 12 }}>by : {this.props.data.response_user_name}</Text>
                                 }
                                 <Text style={styles.textCategory}>{this.props.data.category}</Text>
                             </View>

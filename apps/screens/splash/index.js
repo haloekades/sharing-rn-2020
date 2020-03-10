@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { Component, useEffect } from 'react';
-import { StyleSheet, View, Image, Dimensions, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Image, Dimensions, SafeAreaView, AsyncStorage } from 'react-native';
 import { Container, Text } from "native-base";
 
 import _ from 'lodash';
@@ -12,10 +12,18 @@ const { width, height } = Dimensions.get('window');
 export default function Splash({ navigation }) {
     useEffect(() => {
         setTimeout(() => {
-            navigation.replace('Login');
-            // navigation.replace('MainApp');
+            checkUser()
         }, 2000)
     }, []);
+
+    async function checkUser() {
+        const token = await AsyncStorage.getItem('TOKEN')
+        if (token != null && token != '') {
+            navigation.replace('MainApp');
+        } else {
+            navigation.replace('Login');
+        }
+    }
 
     return (
         <Container>

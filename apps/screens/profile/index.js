@@ -10,7 +10,7 @@ export default class Profile extends Component {
         avatar: "",
         name: "",
         email: "",
-        departemnt: "",
+        position: "",
     }
 
     constructor(props) {
@@ -32,7 +32,7 @@ export default class Profile extends Component {
                     avatar: profile.avatar,
                     name: profile.name,
                     email: profile.email,
-                    departemnt: profile.department,
+                    position: profile.position,
                 })
             }
         }
@@ -40,6 +40,7 @@ export default class Profile extends Component {
 
     doLogout = async () => {
         await AsyncStorage.setItem("DATA_PROFILE", "")
+        await AsyncStorage.setItem("TOKEN", '')
         this.props.navigation.replace('Login')
     }
 
@@ -56,7 +57,7 @@ export default class Profile extends Component {
 
 
     render() {
-        let { avatar, name, email, departemnt } = this.state
+        let { avatar, name, email, position } = this.state
 
         return (
             <Container>
@@ -75,7 +76,7 @@ export default class Profile extends Component {
                                 <View style={{ flex: 1, marginBottom: 10 }}>
                                     {this._renderProfile("Name", name)}
                                     {this._renderProfile("Email", email)}
-                                    {this._renderProfile("Jabatan", departemnt)}
+                                    {this._renderProfile("Jabatan", position)}
                                 </View>
                             </CardItem>
                         </Card>

@@ -27,9 +27,9 @@ export default function HistoryTask({ navigation }) {
     }
 
     async function getTaskApproved() {
-        let response = await getUserTasks("APPROVED");
+        let response = await getUserTasks("A");
         if (response.acknowledge === true) {
-            setTaskList([...taskList, ...response.data])
+            setTaskList([...taskList, ...response.result])
         } else {
             Toast.show({
                 text: response.message,
@@ -39,9 +39,9 @@ export default function HistoryTask({ navigation }) {
     }
 
     async function getTaskRejected() {
-        let response = await getUserTasks("REJECTED");
+        let response = await getUserTasks("R");
         if (response.acknowledge === true) {
-            setTaskList([...taskList, ...response.data])
+            setTaskList([...taskList, ...response.result])
         } else {
             Toast.show({
                 text: response.message,
@@ -51,9 +51,9 @@ export default function HistoryTask({ navigation }) {
     }
 
     async function getApprovalApproved() {
-        let response = await getUserApporval("APPROVED");
+        let response = await getUserApporval("A");
         if (response.acknowledge === true) {
-            setApprovalList([...approvalList, ...response.data])
+            setApprovalList([...approvalList, ...response.result])
         } else {
             Toast.show({
                 text: response.message,
@@ -63,9 +63,9 @@ export default function HistoryTask({ navigation }) {
     }
 
     async function getApprovalRejected() {
-        let response = await getUserApporval("REJECTED");
+        let response = await getUserApporval("R");
         if (response.acknowledge === true) {
-            setApprovalList([...approvalList, ...response.data])
+            setApprovalList([...approvalList, ...response.result])
         } else {
             Toast.show({
                 text: response.message,

@@ -15,7 +15,7 @@ export default function Feeds({ navigation }) {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [avatar, setAvatar] = useState("");
     const [name, setName] = useState("");
-    const [department, setDepartment] = useState("");
+    const [position, setPosition] = useState("");
     const [task, setTask] = useState({ pending: 0, approved: 0, rejected: 0, });
     const [approval, setApproval] = useState({ pending: 0, approved: 0, rejected: 0, });
 
@@ -35,24 +35,24 @@ export default function Feeds({ navigation }) {
 
         if (response.acknowledge === true) {
             let task = {
-                pending: response.data.task.pending,
-                approved: response.data.task.approved,
-                rejected: response.data.task.rejected,
+                pending: response.result.task.pending,
+                approved: response.result.task.approved,
+                rejected: response.result.task.rejected,
             }
 
             let approval = {
-                pending: response.data.approval.pending,
-                approved: response.data.approval.approved,
-                rejected: response.data.approval.rejected,
+                pending: response.result.approval.pending,
+                approved: response.result.approval.approved,
+                rejected: response.result.approval.rejected,
             }
 
-            setAvatar(response.data.avatar)
-            setName(response.data.name)
-            setDepartment(response.data.department)
+            setAvatar(response.result.avatar)
+            setName(response.result.name)
+            setPosition(response.result.position)
             setTask(task)
             setApproval(approval)
 
-            doSaveProfile(response.data);
+            doSaveProfile(response.result);
 
         } else {
             Toast.show({
@@ -65,10 +65,13 @@ export default function Feeds({ navigation }) {
 
     async function doSaveProfile(data) {
         let profile = {
+            id : data.id,
             avatar: data.avatar,
             name: data.name,
-            department: data.department,
-            email: data.email
+            positionId : data.position_id,
+            position : data.position,
+            email: data.email,
+            leaderId : data.leader_id
         };
 
         await AsyncStorage.setItem("DATA_PROFILE", JSON.stringify(profile))
@@ -146,7 +149,7 @@ export default function Feeds({ navigation }) {
                         style={styles.imageProfile} />
                     <View style={{ flexDirection: 'column', marginLeft: 16 }}>
                         <Text style={styles.textTitle}>{name}</Text>
-                        <Text style={styles.textNormal}>{department}</Text>
+                        <Text style={styles.textNormal}>{position}</Text>
                     </View>
                 </TouchableOpacity>
                 <View style={[styles.line, { marginHorizontal: 15, }]} />
@@ -169,7 +172,7 @@ export default function Feeds({ navigation }) {
                             <View style={{ flexDirection: 'column', flex: 1 }}>
                                 <Text style={[styles.textTitle, { marginVertical: 5 }]}>My Task</Text>
                                 <TouchableOpacity
-                                    onPress={() => gotoTaskList('PENDING')}
+                                    onPress={() => gotoTaskList('W')}
                                     style={styles.viewTotalTask}>
                                     <Icon type='Octicons' name='primitive-dot' style={{ color: 'orange' }} />
                                     <Text>PENDING</Text>
@@ -177,7 +180,7 @@ export default function Feeds({ navigation }) {
                                 </TouchableOpacity>
                                 <View style={[styles.line, { marginVertical: 10 }]} />
                                 <TouchableOpacity
-                                    onPress={() => gotoTaskList('APPROVED')}
+                                    onPress={() => gotoTaskList('A')}
                                     style={styles.viewTotalTask}>
                                     <Icon type='Octicons' name='primitive-dot' style={{ color: 'green' }} />
                                     <Text>APPROVED</Text>
@@ -185,7 +188,7 @@ export default function Feeds({ navigation }) {
                                 </TouchableOpacity>
                                 <View style={[styles.line, { marginVertical: 10 }]} />
                                 <TouchableOpacity
-                                    onPress={() => gotoTaskList('REJECTED')}
+                                    onPress={() => gotoTaskList('R')}
                                     style={styles.viewTotalTask}>
                                     <Icon type='Octicons' name='primitive-dot' style={{ color: 'red' }} />
                                     <Text>REJECTED</Text>
@@ -202,7 +205,7 @@ export default function Feeds({ navigation }) {
                             <View style={{ flexDirection: 'column', flex: 1 }}>
                                 <Text style={[styles.textTitle, { marginVertical: 5 }]}>Approval</Text>
                                 <TouchableOpacity
-                                    onPress={() => gotoApprovalList('PENDING')}
+                                    onPress={() => gotoApprovalList('W')}
                                     style={styles.viewTotalTask}>
                                     <Icon type='Octicons' name='primitive-dot' style={{ color: 'orange' }} />
                                     <Text>PENDING</Text>
@@ -210,7 +213,7 @@ export default function Feeds({ navigation }) {
                                 </TouchableOpacity>
                                 <View style={[styles.line, { marginVertical: 10 }]} />
                                 <TouchableOpacity
-                                    onPress={() => gotoApprovalList('APPROVED')}
+                                    onPress={() => gotoApprovalList('A')}
                                     style={styles.viewTotalTask}>
                                     <Icon type='Octicons' name='primitive-dot' style={{ color: 'green' }} />
                                     <Text>APPROVED</Text>
@@ -218,7 +221,7 @@ export default function Feeds({ navigation }) {
                                 </TouchableOpacity>
                                 <View style={[styles.line, { marginVertical: 10 }]} />
                                 <TouchableOpacity
-                                    onPress={() => gotoApprovalList('REJECTED')}
+                                    onPress={() => gotoApprovalList('R')}
                                     style={styles.viewTotalTask}>
                                     <Icon type='Octicons' name='primitive-dot' style={{ color: 'red' }} />
                                     <Text>REJECTED</Text>

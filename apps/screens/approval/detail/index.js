@@ -1,22 +1,32 @@
 /** @format */
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Card, CardItem, View, Button, Toast } from "native-base";
+import { StyleSheet, TouchableOpacity, SafeAreaView, Modal, Dimensions } from 'react-native';
+import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Card, CardItem, View, Button, Toast, Input, Item } from "native-base";
+import moment from 'moment';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
-export default function ApprovalDetail({navigation, route}){
+const { height } = Dimensions.get('window');
+
+import { approvedTask, rejectedTask } from "../../../utils/api/Task"
+
+export default function ApprovalDetail({ navigation, route }) {
     const [data, setData] = useState(null);
     const [statusColor, setStatusColor] = useState('orange');
+    const [showModal, setShowModal] = useState(false);
+    const [modalShowType, setModalShowType] = useState('') // A / R
+    const [responseMessage, setResponseMessage] = useState('')
+    const [errorResponseMessage, setErrorResponseMessage] = useState(false)
 
     useEffect(() => {
         let { params } = route;
         if (params != null && params.data) {
             setData(params.data)
-            setStatusColor(params.data.status == 'APPROVED' ? 'green' : params.data.status == 'REJECTED' ? 'red' : 'orange')
+            setStatusColor(params.data.status == 'A' ? 'green' : params.data.status == 'R' ? 'red' : 'orange')
         }
     }, []);
 
-    function renderItemDetail (type, value){
+    function renderItemDetail(type, value) {
         return (
             <View style={styles.viewItemDetail}>
                 <Text style={{ fontWeight: 'bold' }}>{type}</Text>
@@ -24,27 +34,112 @@ export default function ApprovalDetail({navigation, route}){
             </View>)
     }
 
-    function doApproved(){
-        Toast.show({
-            text: "Approved task success",
-            duration: 2000
-        });
-        
-        navigation.goBack();
+    async function doApproved() {
+        let params = {
+            id: data.id,
+            response_user: data.response_user,
+            response_message: responseMessage,
+        }
+
+        console.log('req approve', params)
+        let response = await approvedTask(params)
+        console.log('res approve', response)
+
+        setShowModal(false)
+
+        if (response.acknowledge == true) {
+            Toast.show({
+                text: "Approved task success",
+                duration: 2000
+            });
+
+            navigation.goBack();
+        } else {
+            Toast.show({
+                text: response.message,
+                duration: 2000
+            });
+        }
     }
 
-    function doRejected(){
-        Toast.show({
-            text: "Rejected task success",
-            duration: 2000
-        });
-        
-        navigation.goBack();
+    async function doRejected() {
+        let params = {
+            id: data.id,
+            response_user: data.response_user,
+            response_message: responseMessage,
+        }
+
+        let response = await rejectedTask(params)
+
+        setShowModal(false)
+
+        if (response.acknowledge == true) {
+            Toast.show({
+                text: "Rejected task success",
+                duration: 2000
+            });
+
+            navigation.goBack();
+        } else {
+            Toast.show({
+                text: response.message,
+                duration: 2000
+            });
+        }
+    }
+
+    function showReqDate(date) {
+        return moment(date).utc().format('DD MMM YYYY');
+    }
+
+    function onChangeMessageModal(text) {
+        setResponseMessage(text)
+        setErrorResponseMessage(text.length < 1)
+    }
+
+    function onSubmit() {
+        if (modalShowType == 'A') {
+            doApproved()
+        } else if (modalShowType == 'R') {
+            doRejected()
+        }
     }
 
     return (
         <Container>
-            <SafeAreaView/>
+            <SafeAreaView />
+            <Modal
+                animationType="slide"
+                presentationStyle='formSheet'
+                transparent={false}
+                visible={showModal}
+                onRequestClose={() => {
+                    // Alert.alert('Modal has been closed.');
+                }}>
+                <View style={{ marginHorizontal: 20, marginVertical: 40 }}>
+                    <View>
+                        <TouchableHighlight
+                            style={{ alignSelf: 'flex-end' }}
+                            onPress={() => {
+                                setShowModal(false)
+                                setResponseMessage('')
+                            }}>
+                            <Icon type="AntDesign" name="close" style={{ color: 'black' }} />
+                        </TouchableHighlight>
+
+                        <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Input {modalShowType == 'A' ? 'Approve' : 'Rejected'} response</Text>
+                        <Item regular error={errorResponseMessage} style={{ marginTop: 30 }}>
+                            <Input value={responseMessage} style={{ height: height / 5 }} autoFocus onChangeText={(txt) => onChangeMessageModal(txt)} placeholder='Input your response' />
+                        </Item>
+                        <Button
+                            onPress={() => onSubmit()}
+                            success block rounded style={{ marginTop: 30 }}>
+                            <Text>Submit</Text>
+                        </Button>
+
+                    </View>
+                </View>
+            </Modal>
             <Header noShadow>
                 <Left style={styles.iconSide}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -63,7 +158,7 @@ export default function ApprovalDetail({navigation, route}){
                         <Card>
                             <CardItem>
                                 <View style={styles.viewCardTask}>
-                                    {renderItemDetail('Name', data.requestName)}
+                                    {renderItemDetail('Name', data.assign_user_name)}
                                 </View>
                             </CardItem>
                         </Card>
@@ -73,7 +168,7 @@ export default function ApprovalDetail({navigation, route}){
                                     {renderItemDetail('Category', data.category)}
                                     {renderItemDetail('Title', data.name)}
                                     {renderItemDetail('Description', data.description)}
-                                    {renderItemDetail('Request Date', data.date)}
+                                    {renderItemDetail('Request Date', showReqDate(data.request_date))}
 
                                 </View>
                             </CardItem>
@@ -88,22 +183,32 @@ export default function ApprovalDetail({navigation, route}){
                                         </View>
                                     </View>
 
-                                    {(data.status != 'PENDING' && data.notes != null) &&
+                                    {(data.status != 'W' && data.response_message != null) &&
                                         <View style={styles.viewBottomNotes}>
                                             <Text style={{ fontWeight: 'bold' }}>Notes</Text>
-                                            <Text style={{ marginTop: 5 }}>{data.notes}</Text>
+                                            <Text style={{ marginTop: 5 }}>{data.response_message}</Text>
                                         </View>
                                     }
 
-                                    {data.status == 'PENDING' &&
+                                    {data.status == 'W' &&
                                         <View style={styles.viewBottomNotes}>
                                             <Button
-                                                onPress={() => doApproved()}
+                                                onPress={() => {
+                                                    setShowModal(true)
+                                                    setModalShowType('A')
+                                                    // doApproved()
+                                                }
+                                                }
                                                 success block rounded style={{ marginTop: 10 }}>
                                                 <Text>Approve</Text>
                                             </Button>
                                             <Button
-                                                onPress={() => doRejected()}
+                                                onPress={() => {
+                                                    setShowModal(true)
+                                                    setModalShowType('R')
+                                                    // doRejected()
+                                                }
+                                                }
                                                 danger block rounded style={{ marginTop: 10 }}>
                                                 <Text>Rejected</Text>
                                             </Button>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Card, CardItem, View, Button } from "native-base";
+import moment from 'moment';
 
 export default function TaskDetail({ navigation, route }) {
     const [data, setData] = useState(null);
@@ -12,7 +13,7 @@ export default function TaskDetail({ navigation, route }) {
         let { params } = route;
         if (params != null && params.data) {
             setData(params.data)
-            setStatusColor(params.data.status == 'APPROVED' ? 'green' : params.data.status == 'REJECTED' ? 'red' : 'orange')
+            setStatusColor(params.data.status == 'A' ? 'green' : params.data.status == 'R' ? 'red' : 'orange')
         }
     }, []);
 
@@ -55,7 +56,7 @@ export default function TaskDetail({ navigation, route }) {
                                     {renderItemDetail('Category', data.category)}
                                     {renderItemDetail('Name', data.name)}
                                     {renderItemDetail('Description', data.description)}
-                                    {renderItemDetail('Request Date', data.date)}
+                                    {renderItemDetail('Request Date', moment(data.request_date).utc().format('DD MMM YYYY'))}
 
                                 </View>
                             </CardItem>
@@ -70,14 +71,14 @@ export default function TaskDetail({ navigation, route }) {
                                         </View>
                                     </View>
 
-                                    {(data.status != 'PENDING' && data.notes != null) &&
+                                    {(data.status != 'W' && data.response_message != null) &&
                                         <View style={styles.viewBottomNotes}>
                                             <Text style={{ fontWeight: 'bold' }}>Notes</Text>
-                                            <Text style={{ marginTop: 5 }}>{data.notes}</Text>
+                                            <Text style={{ marginTop: 5 }}>{data.response_message}</Text>
                                         </View>
                                     }
 
-                                    {data.status == 'PENDING' &&
+                                    {data.status == 'W' &&
                                         <View style={styles.viewBottomNotes}>
                                             <Button
                                                 onPress={() => doEditTask(data)}

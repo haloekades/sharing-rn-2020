@@ -11,7 +11,6 @@ export const getUser = async () => {
 
       const userResponse = await API_CALL(option);
 
-      console.log('user response', userResponse)
       return userResponse;
     } catch (error) {
         return error;
@@ -20,15 +19,10 @@ export const getUser = async () => {
 
 export const getUserTasks = async (status) => {
 
-    let url = API.allTask;
+    let url = API.task;
 
-    if (status == 'PENDING') {
-        url = API.pendingTask
-    } else if (status == 'APPROVED') {
-        url = API.approvedTask
-    } else if (status == 'REJECTED') {
-        url = API.rejectedTask
-    }
+    if (status != null)
+        url = API.task + `type=task&status=${status}`
 
     try {
     const option = {
@@ -46,15 +40,10 @@ export const getUserTasks = async (status) => {
 
 export const getUserApporval = async (status) => {
 
-    let url = API.allApproval;
+    let url = API.task;
 
-    if (status == 'PENDING') {
-        url = API.pendingApproval
-    } else if (status == 'APPROVED') {
-        url = API.approvedApproval
-    } else if (status == 'REJECTED') {
-        url = API.rejectedApproval
-    }
+    if (status != null)
+        url = API.task + `type=approval&status=${status}`
 
     try {
     const option = {

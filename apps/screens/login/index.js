@@ -1,8 +1,8 @@
 /** @format */
 
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, Dimensions, SafeAreaView } from 'react-native';
-import { Container, Content, Text, Input, Item, Icon, Button } from "native-base";
+import { StyleSheet, View, Image, Dimensions, SafeAreaView, AsyncStorage } from 'react-native';
+import { Container, Content, Text, Input, Item, Icon, Button, Toast } from "native-base";
 
 import _ from 'lodash';
 import { IMAGES } from "../../assets";
@@ -13,8 +13,8 @@ const { width, height } = Dimensions.get('window');
 import { loginUser } from "../../utils/api/Login"
 
 export default function LoginForm({ navigation }) {
-    const [username, setUsername] = useState("admin@gmail.com");
-    const [password, setPassword] = useState("12345");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [errorUsername, setErrorUsername] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
@@ -35,14 +35,13 @@ export default function LoginForm({ navigation }) {
 
     async function onLogin() {
         // validation
-        isErrorUsername = _.isEmpty(username);
-        isErrorPassword = _.isEmpty(password);
+        let isErrorUsername = _.isEmpty(username);
+        let isErrorPassword = _.isEmpty(password);
 
         setErrorUsername(isErrorUsername)
         setErrorPassword(isErrorPassword)
 
         if (isErrorUsername == false && isErrorPassword == false) {
-            // navigation.replace('MainApp');
             doLogin(username, password)
         }
     }
@@ -51,23 +50,32 @@ export default function LoginForm({ navigation }) {
         const params = {
             email: username,
             password: password
-
-            // name: 'Pengadaan Alat Berat 4',
-            // description: 'Pengadaan Alat Berat 4',
-            // request_date: '2020-03-07',
-            // assign_user: 3,
-            // //response_date:
-            // response_user: 2,
-            // //response_message:
-            // category: 'PENGADAAN',
-            // status: 'W',
         }
-
-
 
         let response = await loginUser(params);
 
         console.log('login res', response)
+
+        if (response.acknowledge == true && response.result != null) {
+            doSaveToken(response.result.token)
+        } else {
+            Toast.show({
+                text: response.message,
+                duration: 1000
+            });
+        }
+    }
+
+    async function doSaveToken(token) {
+        console.log('login token', token)
+        await AsyncStorage.setItem("TOKEN", token)
+            .then(() => {
+                console.log("saved token success")
+                navigation.replace('MainApp');
+            })
+            .catch(() => {
+                console.log("saved token failed")
+            })
     }
 
     return (

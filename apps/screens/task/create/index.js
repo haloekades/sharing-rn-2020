@@ -1,18 +1,21 @@
 /** @format */
 
 import React, { Component, useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity, Alert, SafeAreaView, AsyncStorage } from 'react-native';
 import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Button, Card, Item, Input, Toast, Picker, Form, View, DatePicker } from "native-base";
 import moment from 'moment';
+
+import { createTask } from "../../../utils/api/Task"
 
 const { height } = Dimensions.get('window');
 
 export default function CreateTask({ navigation, route }) {
+    const [id, setId] = useState(0)
     const [title, setTitle] = useState('Create Task');
     const [category, setCategory] = useState('');
     const [categoryDescription, setCategoryDescription] = useState('');
     const [name, setName] = useState('');
-    const [date, setDate] = useState(moment());
+    const [date, setDate] = useState(null);
     const [description, setDescription] = useState('');
     const [errorDate, setErrorDate] = useState(false);
     const [errorCategory, setErrorCategory] = useState(false);
@@ -21,34 +24,35 @@ export default function CreateTask({ navigation, route }) {
 
     const categoryList = [
         {
-            key: 'pengadaan',
-            label: 'Pengadaan'
+            key: 'PENGADAAN',
+            label: 'PENGADAAN'
         },
         {
-            key: 'perawatan',
-            label: 'Perawatan'
+            key: 'PENGADAAN',
+            label: 'PERAWATAN'
         },
         {
-            key: 'pengurangan',
-            label: 'Pengurangan'
+            key: 'PENGADAAN',
+            label: 'PENGURANGAN'
         },
         {
-            key: 'transportasi',
-            label: 'Transportasi'
+            key: 'PENGADAAN',
+            label: 'TRANSPORTASI'
         },
         {
-            key: 'sewa',
-            label: 'Sewa'
+            key: 'PENGADAAN',
+            label: 'SEWA'
         },
     ]
 
     useEffect(() => {
         let { params } = route;
         if (params != null && params.data) {
+            setId(params.data.id)
             setTitle('Edit Task')
-            setCategory(params.data.category)
+            setDataCategory(params.data.category)
             setName(params.data.name)
-            setDate(params.data.date)
+            setDate(moment(params.data.request_date).utc())
             setDescription(params.data.description)
             setErrorDate(false)
             setErrorCategory(false)
@@ -57,9 +61,13 @@ export default function CreateTask({ navigation, route }) {
         }
     }, []);
 
-    function onChangeDate(text) {
-        setDate(text)
-        setErrorDate(false)
+    function setDataCategory(extraCategory) {
+        let category = categoryList.find(data => data.key == extraCategory)
+
+        if (category != null) {
+            setCategory(category.key)
+            setCategoryDescription(category.description)
+        }
     }
 
     function onChangeTitle(text) {
@@ -70,6 +78,31 @@ export default function CreateTask({ navigation, route }) {
     function onChangeDescription(text) {
         setDescription(text)
         setErrorDescription(false)
+    }
+
+    async function submitTask() {
+        const dataProfile = await AsyncStorage.getItem("DATA_PROFILE");
+
+        if (dataProfile != null && dataProfile != "") {
+            let profile = JSON.parse(dataProfile);
+
+            let responseUserId = profile.leaderId > 0 ? profile.leaderId : profile.id
+
+            let params = {
+                id: id,
+                name: name,
+                description: description,
+                request_date: moment(date).format('YYYY-MM-DD'),
+                assign_user: profile.id,
+                response_user: responseUserId,
+                category: category,
+                status: 'W',
+            }
+
+            let response = await createTask(params)
+
+            showToast(response.acknowledge)
+        }
     }
 
     function showToast(isSuccess) {
@@ -94,7 +127,8 @@ export default function CreateTask({ navigation, route }) {
                 },
                 {
                     text: 'Ya', onPress: () =>
-                        showToast(true)
+                        // showToast(true)
+                        submitTask()
                 },
             ],
             { cancelable: false },
@@ -169,7 +203,7 @@ export default function CreateTask({ navigation, route }) {
                                 formatChosenDate={date => {
                                     return moment(date).format('DD MMM YYYY')
                                 }}
-                                placeHolderText="Select date"
+                                placeHolderText={date != null ? moment(date).format('DD MMM YYYY') : 'Input date'}
                                 placeHolderTextStyle={{ color: "#d3d3d3" }}
                                 onDateChange={onSelectedDate}
                             />

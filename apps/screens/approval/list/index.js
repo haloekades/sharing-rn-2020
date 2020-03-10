@@ -22,8 +22,10 @@ export default function ApprovalList({ navigation, route }) {
     async function getApprovalByStatus (status){
         let response = await getUserApporval(status);
 
+        console.log('approval', response)
+
         if (response.acknowledge === true) {
-            setApprovalList(response.data)
+            setApprovalList(response.result)
         } else {
             Toast.show({
                 text: response.message,
