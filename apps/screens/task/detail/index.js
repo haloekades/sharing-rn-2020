@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Container, Text, Left, Header, Body, Icon, Title, Right, Content, Card, CardItem, View, Button } from "native-base";
 import moment from 'moment';
+import { getTask } from "../../../utils/api/Task"
 
 export default function TaskDetail({ navigation, route }) {
     const [data, setData] = useState(null);
@@ -11,11 +12,39 @@ export default function TaskDetail({ navigation, route }) {
 
     useEffect(() => {
         let { params } = route;
-        if (params != null && params.data) {
-            setData(params.data)
-            setStatusColor(params.data.status == 'A' ? 'green' : params.data.status == 'R' ? 'red' : 'orange')
-        }
+
+        navigation.addListener('focus', () => {
+            if (params != null && params.data) {
+                setTimeout(async () => {
+                    let task = await getData(params.data.id);
+                    
+                    console.log('task', params.data)
+                    if (task) {
+                        params.data = task;
+                    }
+                    console.log('data', params.data)
+                    setData(params.data)
+                    setStatusColor(params.data.status == 'A' ? 'green' : params.data.status == 'R' ? 'red' : 'orange');
+                }, 1000)
+            }
+        });
+
     }, []);
+
+    async function getData(id) {
+        let result = null;
+        try {
+            let task    = await getTask(id);
+
+            if (task.acknowledge == true) {
+                result  = task.result;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        return result;
+    }
 
     function renderItemDetail(type, value) {
         return (

@@ -18,6 +18,21 @@ export const createTask = async (params) => {
     }
 }
 
+export const getTask = async (id) => {  
+    try {
+    const option = {
+        method: 'GET',
+        url: `${API.createTask}/${id}`,
+      };
+
+      const response = await API_CALL(option);
+
+      return response;
+    } catch (error) {
+        return error;
+    }
+}
+
 export const approvedTask = async (params) => {
     try {
     const option = {

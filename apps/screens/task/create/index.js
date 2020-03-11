@@ -28,19 +28,19 @@ export default function CreateTask({ navigation, route }) {
             label: 'PENGADAAN'
         },
         {
-            key: 'PENGADAAN',
+            key: 'PERAWATAN',
             label: 'PERAWATAN'
         },
         {
-            key: 'PENGADAAN',
+            key: 'PENGURANGAN',
             label: 'PENGURANGAN'
         },
         {
-            key: 'PENGADAAN',
+            key: 'TRANSPORTASI',
             label: 'TRANSPORTASI'
         },
         {
-            key: 'PENGADAAN',
+            key: 'SEWA',
             label: 'SEWA'
         },
     ]
