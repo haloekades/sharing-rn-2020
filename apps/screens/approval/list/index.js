@@ -8,13 +8,16 @@ import { getUserApporval } from "../../../utils/api/User"
 
 export default function ApprovalList({ navigation, route }) {
     const [approvalList, setApprovalList] = useState([]);
+    const [status, setStatus] = useState([])
 
     useEffect(() => {
         let { params } = route;
         if (params != null && params.status != null) {
             getApprovalByStatus(params.status);
+            setStatus(params.status)
         } else {
             getApprovalByStatus(null);
+            setStatus(null)
         }
     }, []);
 
@@ -43,12 +46,7 @@ export default function ApprovalList({ navigation, route }) {
 
     function isUpdatedData(isUpdated) {
         if (isUpdated === true) {
-            let { params } = route;
-            if (params != null && params.status != null) {
-                getApprovalByStatus(params.status);
-            } else {
-                getApprovalByStatus(null);
-            }
+            getApprovalByStatus(status);
         }
     }
 

@@ -28,9 +28,24 @@ export default function TaskDetail({ navigation, route }) {
     function doEditTask(data) {
         if (data) {
             navigation.push('CreateTask', {
-                data: data
+                data: data,
+                isUpdatedData : isUpdatedData
             });
         }
+    }
+
+    function isUpdatedData(isUpdatedData){
+        if(isUpdatedData === true){
+            onBackPressed(true)
+        }
+    }
+
+    function onBackPressed(isUpdatedData) {
+        if (route.params != null && route.params.isUpdatedData != null) {
+            route.params.isUpdatedData(isUpdatedData)
+        }
+
+        navigation.goBack()
     }
 
     return (
@@ -38,7 +53,7 @@ export default function TaskDetail({ navigation, route }) {
             <SafeAreaView/>
             <Header noShadow>
                 <Left style={styles.iconSide}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity onPress={() => onBackPressed(false)}>
                         <Icon type='AntDesign' name='arrowleft' style={{ color: 'white' }} />
                     </TouchableOpacity>
                 </Left>

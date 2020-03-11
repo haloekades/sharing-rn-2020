@@ -8,14 +8,17 @@ import { getUserTasks } from "../../../utils/api/User"
 
 export default function ApprovalList({ navigation, route }) {
     const [taskList, setTaskList] = useState([]);
+    const [status, setStatus] = useState(null)
 
     useEffect(() => {
         let { params } = route;
 
         if (params != null && params.status) {
             getTaskByStatus(params.status)
+            setStatus(params.status)
         } else {
             getTaskByStatus(null)
+            setStatus(null)
         }
     }, []);
 
@@ -32,15 +35,22 @@ export default function ApprovalList({ navigation, route }) {
         }
     }
 
-    function gotoTaskDetail(data){
+    function gotoTaskDetail(data) {
         if (data != null) {
             navigation.push('TaskDetail', {
-                data: data
+                data: data,
+                isUpdatedData: isUpdatedData
             });
         }
     }
 
-    function _renderItem ({ item }){
+    function isUpdatedData(isUpdatedData) {
+        if (isUpdatedData === true) {
+            getTaskByStatus(status)
+        }
+    }
+
+    function _renderItem({ item }) {
         return (
             <ItemTask data={item} onClickItem={gotoTaskDetail} />
         )
@@ -48,7 +58,7 @@ export default function ApprovalList({ navigation, route }) {
 
     return (
         <Container>
-            <SafeAreaView/>
+            <SafeAreaView />
             <Header noShadow>
                 <Left style={styles.iconSide}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

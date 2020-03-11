@@ -19,10 +19,10 @@ export const getUser = async () => {
 
 export const getUserTasks = async (status) => {
 
-    let url = API.task;
+    let url = API.task + `type=task`;
 
     if (status != null)
-        url = API.task + `type=task&status=${status}`
+        url = url + `&status=${status}`
 
     try {
     const option = {
@@ -40,10 +40,10 @@ export const getUserTasks = async (status) => {
 
 export const getUserApporval = async (status) => {
 
-    let url = API.task;
+    let url = API.task+ `type=approval`;
 
     if (status != null)
-        url = API.task + `type=approval&status=${status}`
+        url = url + `type=approval&status=${status}`
 
     try {
     const option = {

@@ -105,14 +105,21 @@ export default function CreateTask({ navigation, route }) {
         }
     }
 
+    function onBackPressed(isUpdatedData) {
+        if (route.params != null && route.params.isUpdatedData != null) {
+            route.params.isUpdatedData(isUpdatedData)
+        }
+
+        navigation.goBack()
+    }
+
     function showToast(isSuccess) {
         Toast.show({
             text: isSuccess ? "Input data berhasil di simpan" : "Input data gagal di simpan",
             duration: 2000
         });
 
-        if (isSuccess)
-            navigation.goBack()
+        onBackPressed(isSuccess)
     }
 
     function showAlert() {

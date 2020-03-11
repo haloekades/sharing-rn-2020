@@ -32,7 +32,9 @@ const API_CALL = async option => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'Authorization': `${authToken}`,
+        'Cache-Control': 'no-cache'
       },
+      // cache: false,
       ...option,
     };
 
