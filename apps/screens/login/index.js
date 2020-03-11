@@ -54,7 +54,6 @@ export default function LoginForm({ navigation }) {
 
         let response = await loginUser(params);
 
-        console.log('login res', response)
 
         if (response.acknowledge == true && response.result != null) {
             doSaveToken(response.result.token)

@@ -1,20 +1,21 @@
-import { API } from "../../config";
-import {API_CALL} from "../api/BaseRequest"
-export * from './Handler';
+import { API } from "../../config"; 
+import { API_REQUEST, PARSE_DATA } from '../../utils/api/ApiRequest';
+import { errorHanlder } from "./Handler";
+import { AsyncStorage } from 'react-native';
 
 export const loginUser = async (params) => {
+    let result = null;
     try {
-    const option = {
-        method: 'POST',
-        url: `${API.login}`,
-        params: params
-      };
+        let idToken     = await AsyncStorage.getItem("TOKEN");
+        let options     = { "Content-Type": "application/x-www-form-urlencoded" };
+        
+        let { data }    = await API_REQUEST(idToken, options).post(API.login, PARSE_DATA(params));
 
-      console.log('option login', option)
-      const userResponse = await API_CALL(option);
-
-      return userResponse;
+        result = data;
     } catch (error) {
-        return error;
+        console.log('error', error);
+        result = errorHanlder(error);
     }
+
+    return result;
 }
