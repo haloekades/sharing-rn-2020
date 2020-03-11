@@ -20,9 +20,7 @@ export default function ApprovalList({ navigation, route }) {
     }, []);
 
     async function getTaskByStatus(status) {
-        console.log('status', status)
         let response = await getUserTasks(status);
-        console.log('task', response)
 
         if (response.acknowledge === true) {
             setTaskList(response.result)
