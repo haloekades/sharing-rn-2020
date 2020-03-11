@@ -1,5 +1,4 @@
 import { API } from "../../config"; 
-import { API_REQUEST, PARSE_DATA } from '../../utils/api/ApiRequest';
 import { errorHanlder } from "./Handler";
 import { AsyncStorage } from 'react-native';
 

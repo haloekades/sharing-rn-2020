@@ -41,9 +41,7 @@ export default function ApprovalDetail({ navigation, route }) {
             response_message: responseMessage,
         }
 
-        console.log('req approve', params)
         let response = await approvedTask(params)
-        console.log('res approve', response)
 
         setShowModal(false)
 
@@ -53,7 +51,7 @@ export default function ApprovalDetail({ navigation, route }) {
                 duration: 2000
             });
 
-            navigation.goBack();
+            onBackPressed(true)
         } else {
             Toast.show({
                 text: response.message,
@@ -79,7 +77,7 @@ export default function ApprovalDetail({ navigation, route }) {
                 duration: 2000
             });
 
-            navigation.goBack();
+            onBackPressed(true)
         } else {
             Toast.show({
                 text: response.message,
@@ -103,6 +101,14 @@ export default function ApprovalDetail({ navigation, route }) {
         } else if (modalShowType == 'R') {
             doRejected()
         }
+    }
+
+    function onBackPressed(isUpdatedData) {
+        if (route.params != null && route.params.isUpdatedData != null) {
+            route.params.isUpdatedData(isUpdatedData)
+        }
+
+        navigation.goBack()
     }
 
     return (
@@ -142,7 +148,7 @@ export default function ApprovalDetail({ navigation, route }) {
             </Modal>
             <Header noShadow>
                 <Left style={styles.iconSide}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity onPress={() => onBackPressed(false)}>
                         <Icon type='AntDesign' name='arrowleft' style={{ color: 'white' }} />
                     </TouchableOpacity>
                 </Left>

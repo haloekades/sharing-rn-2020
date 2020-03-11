@@ -66,10 +66,8 @@ export default function LoginForm({ navigation }) {
     }
 
     async function doSaveToken(token) {
-        console.log('login token', token)
         await AsyncStorage.setItem("TOKEN", token)
             .then(() => {
-                console.log("saved token success")
                 navigation.replace('MainApp');
             })
             .catch(() => {

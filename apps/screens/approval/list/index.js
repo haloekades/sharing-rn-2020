@@ -19,10 +19,8 @@ export default function ApprovalList({ navigation, route }) {
     }, []);
 
 
-    async function getApprovalByStatus (status){
+    async function getApprovalByStatus(status) {
         let response = await getUserApporval(status);
-
-        console.log('approval', response)
 
         if (response.acknowledge === true) {
             setApprovalList(response.result)
@@ -34,15 +32,27 @@ export default function ApprovalList({ navigation, route }) {
         }
     }
 
-    function gotoApprovalDetail(data){
-        if (data != null){
+    function gotoApprovalDetail(data) {
+        if (data != null) {
             navigation.push('ApprovalDetail', {
-                data: data
+                data: data,
+                isUpdatedData: isUpdatedData
             });
         }
     }
 
-    function _renderItem ({ item }) {
+    function isUpdatedData(isUpdated) {
+        if (isUpdated === true) {
+            let { params } = route;
+            if (params != null && params.status != null) {
+                getApprovalByStatus(params.status);
+            } else {
+                getApprovalByStatus(null);
+            }
+        }
+    }
+
+    function _renderItem({ item }) {
         return (
             <ItemApproval data={item} onClickItem={gotoApprovalDetail} />
         )
@@ -50,7 +60,7 @@ export default function ApprovalList({ navigation, route }) {
 
     return (
         <Container>
-            <SafeAreaView/>
+            <SafeAreaView />
             <Header noShadow>
                 <Left style={styles.iconSide}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
