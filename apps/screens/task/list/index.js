@@ -26,6 +26,8 @@ export default function ApprovalList({ navigation, route }) {
         let response = await getUserTasks(status);
 
         if (response.acknowledge === true) {
+
+            console.log("list task", response.result)
             setTaskList(response.result)
         } else {
             Toast.show({
