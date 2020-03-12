@@ -9,12 +9,14 @@ import { getUserTasks, getUserApporval } from '../../utils/api/User'
 export default function HistoryTask({ navigation }) {
     const [taskList, setTaskList] = useState([]);
     const [approvalList, setApprovalList] = useState([]);
+    const [newTaskList, setNewTaskList] = useState([]);
+    const [newApprovalList, setnewApprovalList] = useState([]);
+
 
     useEffect(() => {
         getHistoryTask();
         getHistoryApproval()
     }, []);
-
 
     function getHistoryTask() {
         getTaskApproved();
@@ -26,10 +28,18 @@ export default function HistoryTask({ navigation }) {
         getApprovalRejected();
     }
 
+    useEffect(() => {
+        setTaskList([...taskList, ...newTaskList])
+    }, [newTaskList]);
+
+    useEffect(() => {
+        setApprovalList([...approvalList, ...newApprovalList])
+    }, [newApprovalList]);
+
     async function getTaskApproved() {
         let response = await getUserTasks("A");
         if (response.acknowledge === true) {
-            setTaskList([...taskList, ...response.result])
+            setNewTaskList(response.result)
         } else {
             Toast.show({
                 text: response.message,
@@ -41,7 +51,7 @@ export default function HistoryTask({ navigation }) {
     async function getTaskRejected() {
         let response = await getUserTasks("R");
         if (response.acknowledge === true) {
-            setTaskList([...taskList, ...response.result])
+                setNewTaskList(response.result)
         } else {
             Toast.show({
                 text: response.message,
@@ -53,7 +63,7 @@ export default function HistoryTask({ navigation }) {
     async function getApprovalApproved() {
         let response = await getUserApporval("A");
         if (response.acknowledge === true) {
-            setApprovalList([...approvalList, ...response.result])
+            setnewApprovalList(response.result)
         } else {
             Toast.show({
                 text: response.message,
@@ -65,7 +75,7 @@ export default function HistoryTask({ navigation }) {
     async function getApprovalRejected() {
         let response = await getUserApporval("R");
         if (response.acknowledge === true) {
-            setApprovalList([...approvalList, ...response.result])
+            setnewApprovalList(response.result)
         } else {
             Toast.show({
                 text: response.message,
@@ -82,21 +92,21 @@ export default function HistoryTask({ navigation }) {
         }
     }
 
-    function _renderItemTask ({ item }){
+    function _renderItemTask({ item }) {
         return (
             <ItemTask data={item} onClickItem={gotoTaskDetail} />
         )
     }
 
-    function gotoApprovalDetail (data){
-        if (data != null){
+    function gotoApprovalDetail(data) {
+        if (data != null) {
             navigation.push('ApprovalDetail', {
-                    data: data
-                });
+                data: data
+            });
         }
     }
 
-    function _renderItemApproval ({ item }){
+    function _renderItemApproval({ item }) {
         return (
             <ItemApproval data={item} onClickItem={gotoApprovalDetail} />
         )
@@ -104,7 +114,7 @@ export default function HistoryTask({ navigation }) {
 
     return (
         <Container>
-            <SafeAreaView/>
+            <SafeAreaView />
             <Header noShadow>
                 <Body style={{ paddingHorizontal: 16 }}>
                     <Title style={styles.textTitle}>HISTORY</Title>

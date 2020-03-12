@@ -34,6 +34,8 @@ export default function Feeds({ navigation }) {
         setIsRefreshing(false)
 
         if (response.acknowledge === true) {
+            response.result.avatar = "https://www.ibts.org/wp-content/uploads/2017/08/iStock-476085198.jpg"
+
             let task = {
                 pending: response.result.task.pending,
                 approved: response.result.task.approved,
