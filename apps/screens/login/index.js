@@ -10,7 +10,6 @@ import { validateEmail } from '../../utils/Common';
 import myColor from '../../theme/variables/myColor';
 
 const { width, height } = Dimensions.get('window');
-import { loginUser } from "../../utils/api/Login"
 
 export default function LoginForm({ navigation }) {
     const [username, setUsername] = useState("");
@@ -42,25 +41,7 @@ export default function LoginForm({ navigation }) {
         setErrorPassword(isErrorPassword)
 
         if (isErrorUsername == false && isErrorPassword == false) {
-            doLogin(username, password)
-        }
-    }
-
-    async function doLogin(username, password) {
-        const params = {
-            email: username,
-            password: password
-        }
-
-        let response = await loginUser(params);
-
-        if (response.acknowledge == true && response.result != null) {
-            doSaveToken(response.result.token)
-        } else {
-            Toast.show({
-                text: response.message,
-                duration: 1000
-            });
+            // doLogin(username, password)
         }
     }
 
