@@ -56,3 +56,75 @@ STEP 5 : Install moment
 npm install moment --save
 
 ________________________________________________________________________________________________________________________________
+
+
+WEEK 1 - Splash, Login screens
+
+NEXT SESSION:
+
+HIT API
+- create file config
+    src/config/HttpStatusCode.js
+    src/config/index.js
+    src/config/api.js
+
+- create file utils
+    src/utils/api/Handler.js
+    src/utils/api/BaseRequest.js
+    src/utils/api/Login.js
+
+- hit api login in 
+    src/screens/login/index.js
+
+- Create Main Screen
+    src/sreens/home/index.js
+    src/sreens/history/index.js
+    src/sreens/profile/index.js
+    src/sreens/index.js - register home, history, profile
+    src/routes/MainRoutes.js
+    app.js -> register Main Screen
+
+- Layouting Home + API
+    src/utils/api/User.js -> create method getUser
+    src/config/api.js -> add end point users
+    src/sreens/home/index.js
+
+- Layouting Profile 
+    src/sreens/profile/index.js - render & logout
+
+- Layouting CreateTask
+    src/utils/api/Task.js -> create method createTask
+    src/config/api.js -> add end point createTask
+    src/sreens/task/create/index.js
+    src/sreens/index.js - register createtask
+    app.js -> register Create Task
+
+- Layouting TaskList + API
+    src/utils/api/Task.js -> create method getUserTasks
+    src/config/api.js -> add end point task
+    src/sreens/task/list/index.js
+    src/sreens/index.js - register taskList
+    src/components/task/ItemTask.js
+    src/components/index.js
+
+- Layouting TaskDetail
+    src/sreens/task/detail/index.js
+    src/sreens/index.js - register taskDetail
+    app.js -> register TaskDetail
+
+- Layouting ApprovalList + API
+    src/utils/api/Task.js -> create method getUserApporval
+    src/config/api.js -> add end point task
+    src/sreens/approval/list/index.js
+    src/sreens/index.js - register approvalList
+    app.js -> register approvalList
+    src/components/task/ItemApproval.js
+    src/components/index.js
+
+- Layouting ApprovalDetail + API -> screen to reject & approved task
+    src/utils/api/Task.js -> create method approvedTask & rejectedTask
+    src/config/api.js -> add end point approved & rejected
+    src/sreens/approval/detail/index.js
+    src/sreens/index.js - register approvalList
+    app.js -> register approvalList
+
