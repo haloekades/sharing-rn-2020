@@ -1,0 +1,300 @@
+API DOCS
+________________________________________________________________________________________________________________________________
+
+LOGIN
+
+URL : POST
+
+http://approval.rahmat1929.net/1.0/user/login
+
+REQUEST :
+{
+    email: username,
+    password: password
+}
+
+RESPONSE:
+
+{
+    "status": 200,
+    "message": "Success",
+    "acknowledge": true,
+    "result": {
+        "data": {
+            "id": 3,
+            "name": "admin",
+            "email": "admin@gmail.com",
+            "gender": "M",
+            "password": "12345",
+            "status": "A",
+            "position_id": 2,
+            "position": "Senior Officer",
+            "leader_id": 2,
+            "leader_name": "superadmin",
+            "leader": "Manager",
+            "leader_position": 1
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMsImlhdCI6MTU4OTM3NTk2N30.VpSaR9by8bZtaWhtbw6IH73gbtTDjVdxHkL9aqRuj1w"
+    }
+}
+________________________________________________________________________________________________________________________________
+
+PROFILE 
+
+URL : GET
+http://approval.rahmat1929.net/1.0/user/profile
+
+HEADERS:
+Authorization : token
+
+RESPONSE :
+
+{
+    "status": 200,
+    "message": "Success",
+    "acknowledge": true,
+    "result": {
+        "id": 3,
+        "name": "admin",
+        "email": "admin@gmail.com",
+        "gender": "M",
+        "password": "12345",
+        "status": "A",
+        "position_id": 2,
+        "position": "Senior Officer",
+        "leader_id": 2,   (leader)
+        "leader_name": "superadmin",
+        "leader": "Manager",
+        "leader_position": 1,
+        "task": {
+            "pending": 15,
+            "approved": 3,
+            "rejected": 2
+        },
+        "approval": {
+            "pending": 0,
+            "approved": 0,
+            "rejected": 0
+        }
+    }
+}
+
+________________________________________________________________________________________________________________________________
+
+CREATE / EDIT TASK
+
+URL : POST
+
+http://approval.rahmat1929.net/1.0/task
+
+HEADERS:
+Authorization : token
+
+REQUEST :
+{
+    id: id,  // 0 = create, id  > 0 = edit
+    name: name,
+    description: description,
+    request_date: moment(date).format('YYYY-MM-DD'),
+    assign_user: profile.id,  (self)
+    response_user: responseUserId, (leader)
+    category: category,
+    status: 'W',
+}
+
+RESPONSE :
+{
+    "status": 200,
+    "message": "Success",
+    "acknowledge": true,
+    "result": {
+        "saved": "1 rows"
+    }
+}
+________________________________________________________________________________________________________________________________
+
+GET TASK LIST
+
+URL : GET
+http://approval.rahmat1929.net/1.0/task?type=task&status=W
+
+note : 
+status enum [ R, A, W ]
+if empty is get all
+
+HEADERS:
+Authorization : token
+
+RESPONSE :
+{
+    "status": 200,
+    "message": "Success",
+    "acknowledge": true,
+    "result": [
+        {
+            "id": 7,
+            "name": "Ghhyyy",
+            "description": "Ggyy",
+            "request_date": "2020-01-31T17:00:00.000Z",
+            "category": "PERAWATAN",
+            "assign_user": 3,
+            "assign_user_name": "admin",
+            "response_date": "2020-03-12T17:00:00.000Z",
+            "response_message": "Not ok",
+            "response_user": 2,
+            "response_user_name": "superadmin",
+            "status": "R"
+        },
+        {
+            "id": 8,
+            "name": "Pengurangan asset laptop",
+            "description": "Pengurangan 10 buah",
+            "request_date": "2020-02-27T17:00:00.000Z",
+            "category": "PENGURANGAN",
+            "assign_user": 3,
+            "assign_user_name": "admin",
+            "response_date": "2020-03-12T17:00:00.000Z",
+            "response_message": "Ok",
+            "response_user": 2,
+            "response_user_name": "superadmin",
+            "status": "A"
+        },
+        {
+            "id": 9,
+            "name": "Task 1",
+            "description": "Coba",
+            "request_date": "2020-02-02T17:00:00.000Z",
+            "category": "PERAWATAN",
+            "assign_user": 3,
+            "assign_user_name": "admin",
+            "response_date": null,
+            "response_message": null,
+            "response_user": 2,
+            "response_user_name": "superadmin",
+            "status": "W"
+        }
+    ]
+}
+
+________________________________________________________________________________________________________________________________
+
+GET APPROVAL LIST
+
+URL : GET
+http://approval.rahmat1929.net/1.0/task?type=approval&status=W
+
+note : 
+status enum [ R, A, W ]
+if empty is get all
+
+HEADERS:
+Authorization : token
+
+RESPONSE :
+{
+    "status": 200,
+    "message": "Success",
+    "acknowledge": true,
+    "result": [
+        {
+            "id": 7,
+            "name": "Ghhyyy",
+            "description": "Ggyy",
+            "request_date": "2020-01-31T17:00:00.000Z",
+            "category": "PERAWATAN",
+            "assign_user": 3,
+            "assign_user_name": "admin",
+            "response_date": "2020-03-12T17:00:00.000Z",
+            "response_message": "Not ok",
+            "response_user": 2,
+            "response_user_name": "superadmin",
+            "status": "R"
+        },
+        {
+            "id": 8,
+            "name": "Pengurangan asset laptop",
+            "description": "Pengurangan 10 buah",
+            "request_date": "2020-02-27T17:00:00.000Z",
+            "category": "PENGURANGAN",
+            "assign_user": 3,
+            "assign_user_name": "admin",
+            "response_date": "2020-03-12T17:00:00.000Z",
+            "response_message": "Ok",
+            "response_user": 2,
+            "response_user_name": "superadmin",
+            "status": "A"
+        },
+        {
+            "id": 22,
+            "name": "Pengadaan Alat Berat ",
+            "description": "Pengadaan Alat Berat Tracktor",
+            "request_date": "2020-05-13T17:00:00.000Z",
+            "category": "PENGADAAN",
+            "assign_user": 3,
+            "assign_user_name": "admin",
+            "response_date": null,
+            "response_message": null,
+            "response_user": 2,
+            "response_user_name": "superadmin",
+            "status": "W"
+        }
+    ]
+}
+
+________________________________________________________________________________________________________________________________
+
+APPROVED TASK
+
+URL : POST
+http://approval.rahmat1929.net/1.0/approval/approve
+
+HEADERS:
+Authorization : token
+
+REQUEST :
+{
+    id: data.id, (task id)
+    response_user: data.response_user, (self id from data approval list)
+    response_message: responseMessage,
+}
+
+RESPONSE :
+{
+    "status": 200,
+    "message": "Success",
+    "acknowledge": true,
+    "result": {
+        "saved": "1 rows"
+    }
+}
+
+________________________________________________________________________________________________________________________________
+
+REJECTED TASK
+
+URL : POST
+http://approval.rahmat1929.net/1.0/approval/reject
+
+HEADERS:
+Authorization : token
+
+REQUEST :
+{
+    id: data.id, (task id)
+    response_user: data.response_user, (self id from data approval list)
+    response_message: responseMessage,
+}
+
+RESPONSE :
+{
+    "status": 200,
+    "message": "Success",
+    "acknowledge": true,
+    "result": {
+        "saved": "1 rows"
+    }
+}
+
+________________________________________________________________________________________________________________________________
+
+
