@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, Dimensions, SafeAreaView, AsyncStorage } from 'react-native';
 import { Container, Content, Text, Input, Item, Icon, Button, Toast } from "native-base";
-
 import _ from 'lodash';
 import { IMAGES } from "../../assets";
 import { validateEmail } from '../../utils/Common';
 import myColor from '../../theme/variables/myColor';
+import { loginUser } from '../../utils/api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -41,18 +41,40 @@ export default function LoginForm({ navigation }) {
         setErrorPassword(isErrorPassword)
 
         if (isErrorUsername == false && isErrorPassword == false) {
-            // doLogin(username, password)
+            doLogin(username, password)
         }
     }
 
-    async function doSaveToken(token) {
+    async function doLogin(username, password){
+        const params = {
+            email : username,
+            password : password
+        }
+
+        let response = await loginUser(params)
+
+        console.log('res', response)
+
+        if(response.acknowledge == true && response.result != null){
+            doSaveToken(response.result.token)
+            //opsi show token toast
+        }else{
+            Toast.show({
+                text: response.message,
+                duration : 1000
+            })
+        }
+    }
+
+    async function doSaveToken(token){
         await AsyncStorage.setItem("TOKEN", token)
-            .then(() => {
-                navigation.replace('MainApp');
-            })
-            .catch(() => {
-                console.log("saved token failed")
-            })
+        .then(() =>{
+            //goto main screen
+            navigation.replace('MainApp');
+        })
+        .catch(() =>{
+            console.log("saved token failed")
+        })
     }
 
     return (
