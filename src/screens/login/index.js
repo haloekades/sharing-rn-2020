@@ -8,6 +8,8 @@ import _ from 'lodash';
 import { IMAGES } from "../../assets";
 import { validateEmail } from '../../utils/Common';
 import myColor from '../../theme/variables/myColor';
+import { loginUser } from '../../utils/api'
+import { duration } from 'moment';
 
 const { width, height } = Dimensions.get('window');
 
@@ -41,14 +43,39 @@ export default function LoginForm({ navigation }) {
         setErrorPassword(isErrorPassword)
 
         if (isErrorUsername == false && isErrorPassword == false) {
-            // doLogin(username, password)
+            doLogin(username, password)
+        }
+    }
+
+    async function doLogin(username, password) {
+        const params = {
+            email: username,
+            password: password
+        }
+
+        let loginResponse = await loginUser(params)
+
+        console.log("login_rosponse", loginResponse)
+
+        if (loginResponse.acknowledge == true && loginResponse.result != null) {
+            doSaveToken(loginResponse.result.token)
+
+            Toast.show({
+                text: loginResponse.result.token,
+                duration: 1000
+            })
+        } else {
+            Toast.show({
+                text: loginResponse.message,
+                duration: 1000
+            })
         }
     }
 
     async function doSaveToken(token) {
         await AsyncStorage.setItem("TOKEN", token)
             .then(() => {
-                navigation.replace('MainApp');
+                // goto Main
             })
             .catch(() => {
                 console.log("saved token failed")
