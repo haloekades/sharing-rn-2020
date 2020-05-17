@@ -9,6 +9,8 @@ import { MainNav } from './src/routes/MainRoutes'
 
 const StackApp = createStackNavigator();
 
+console.disableYellowBox = true;
+
 function App() {
   return (
     <StyleProvider style={getTheme(color)}>
