@@ -61,7 +61,7 @@ export default function Home({ navigation }) {
             //goto create task
             // navigation.navigate('CreateTask')
             navigation.push('CreateTask', {
-                isUpdateData : isUpdateData
+                isUpdated : isUpdateData
             })
 
         } else if (textCard == 'My Task') {

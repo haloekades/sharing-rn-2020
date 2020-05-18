@@ -172,7 +172,6 @@ export default function CreateTask({ navigation, route }) {
                     route.params.isUpdated(true)
                 }
 
-
                 navigation.goBack();
             } else {
                 Toast.show({
@@ -256,6 +255,7 @@ export default function CreateTask({ navigation, route }) {
                             style={{ height: heightDevice / 5 }}
                             keyboardType='default'
                             autoFocus={false}
+                            multiline
                             onChangeText={(text) => {
                                 onChangeDescription(text)
                             }}
