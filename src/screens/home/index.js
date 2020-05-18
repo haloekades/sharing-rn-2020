@@ -59,7 +59,10 @@ export default function Home({ navigation }) {
     function onCLickCard(textCard) {
         if (textCard == 'Create') {
             //goto create task
-            navigation.navigate('CreateTask')
+            // navigation.navigate('CreateTask')
+            navigation.push('CreateTask', {
+                isUpdateData : isUpdateData
+            })
 
         } else if (textCard == 'My Task') {
             //goto my task
@@ -70,11 +73,17 @@ export default function Home({ navigation }) {
         }
     }
 
+    function isUpdateData(isDataUpadated){
+        if(isDataUpadated){
+            doGetProfile()
+        }
+    }
+
     function _renderIconWithText(iconType, iconName, text) {
         return (
             <Card style={styles.cardButton}>
                 <CardItem style={{ flex: 1 }}>
-                    <TouchableOpacity 
+                    <TouchableOpacity onPress={() => navigation.goBack()}
                     onPress={() => onCLickCard(text)}
                     style={styles.btnTask}>
                         <Icon type={iconType} name={iconName} style={styles.iconTask} />
