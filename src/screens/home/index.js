@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Header, Body, Title, Content, Card, CardItem, Icon, Toast } from 'native-base'
-import { SafeAreaView , View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, AsyncStorage, RefreshControl } from 'react-native'
+import { SafeAreaView, View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, AsyncStorage, RefreshControl } from 'react-native'
 import { getUser } from '../../utils/api';
 
 const { width: widthDevice, height: heightDevice } = Dimensions.get('window');
 
-export default function Home({navigation}){
-    const [ avatar, setAvatar]  = useState("https://api.adorable.io/avatars/285/abott@adorable.png");
-    const [ nama, setNama]      = useState("Rahmat Hidayat");
-    const [ position, setPosition]      = useState("Manager");
-    const [ task, setTask]              = useState({ pending: 0, approved: 0, rejected: 0});
-    const [ approval, setApproval]      = useState({ pending: 0, approved: 0, rejected: 0});
-    const [ isRefreshing, setIsRefreshing]  = useState(false);
+export default function Home({ navigation }) {
+    const [avatar, setAvatar] = useState("https://api.adorable.io/avatars/285/abott@adorable.png");
+    const [nama, setNama] = useState("Rahmat Hidayat");
+    const [position, setPosition] = useState("Manager");
+    const [task, setTask] = useState({ pending: 0, approved: 0, rejected: 0 });
+    const [approval, setApproval] = useState({ pending: 0, approved: 0, rejected: 0 });
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     useEffect(() => {
         doGetProfile();
@@ -39,13 +39,13 @@ export default function Home({navigation}){
 
     async function doSaveProfile(data) {
         let profile = {
-            id          : data.id,
-            avatar      : data.avatar,
-            name        : data.name,
-            positionId  : data.position_id,
-            position    : data.position,
-            email       : data.email,
-            leaderId    : data.leader_id
+            id: data.id,
+            avatar: data.avatar,
+            name: data.name,
+            positionId: data.position_id,
+            position: data.position,
+            email: data.email,
+            leaderId: data.leader_id
         }
 
         await AsyncStorage.setItem('DATA_PROFILE', JSON.stringify(profile));
@@ -56,11 +56,27 @@ export default function Home({navigation}){
         doGetProfile();
     }
 
-    function _renderIconWithText (iconType, iconName, text) {
+    function onCLickCard(textCard) {
+        if (textCard == 'Create') {
+            //goto create task
+            navigation.navigate('CreateTask')
+
+        } else if (textCard == 'My Task') {
+            //goto my task
+
+        } else if (textCard == 'Approval') {
+            //goto approval
+
+        }
+    }
+
+    function _renderIconWithText(iconType, iconName, text) {
         return (
             <Card style={styles.cardButton}>
                 <CardItem style={{ flex: 1 }}>
-                    <TouchableOpacity style={styles.btnTask}>
+                    <TouchableOpacity 
+                    onPress={() => onCLickCard(text)}
+                    style={styles.btnTask}>
                         <Icon type={iconType} name={iconName} style={styles.iconTask} />
                         <Text style={styles.textTask}>{text}</Text>
                     </TouchableOpacity>
@@ -72,33 +88,33 @@ export default function Home({navigation}){
     function _renderItemTask(iconType, iconName, color, title, total) {
         return (
             <TouchableOpacity style={[styles.viewTotalTask, styles.line]}>
-                <Icon type={iconType} name={iconName} style={{ color: color}}/>
+                <Icon type={iconType} name={iconName} style={{ color: color }} />
                 <Text>{title}</Text>
                 <Text style={styles.textTotalTask}>{total}</Text>
             </TouchableOpacity>
         )
     }
 
-    return(
+    return (
         <Container>
-            <SafeAreaView/>
+            <SafeAreaView />
             <Header>
                 <Body>
                     <Title>Home</Title>
                 </Body>
             </Header>
-            <Content 
+            <Content
                 style={styles.container}
                 refreshControl={
-                    <RefreshControl 
+                    <RefreshControl
                         refreshing={isRefreshing}
                         onRefresh={onRefresh} />
                 }>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => navigation.navigate('Profile')}
                     style={[styles.touchProfile, styles.line]}>
-                    <Image 
-                        source={{ uri: avatar }} 
+                    <Image
+                        source={{ uri: avatar }}
                         style={styles.imageProfile} />
                     <View style={styles.wrapperProfile}>
                         <Text style={styles.textName}>{nama}</Text>
@@ -120,7 +136,7 @@ export default function Home({navigation}){
                     </View>
                 </View>
 
-                <View style={{ marginVertical: 10, marginHorizontal: 10}}>
+                <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
                     <Card>
                         <CardItem>
                             <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -133,7 +149,7 @@ export default function Home({navigation}){
                     </Card>
                 </View>
 
-                <View style={{ marginVertical: 10, marginHorizontal: 10}}>
+                <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
                     <Card>
                         <CardItem>
                             <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -191,8 +207,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     cardButton: {
-        width: widthDevice/3.5,
-        height: heightDevice/5
+        width: widthDevice / 3.5,
+        height: heightDevice / 5
     },
     btnTask: {
         flexDirection: 'column',
@@ -222,8 +238,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textTotalTask: {
-        textAlign: 'right', 
-        marginHorizontal: 10, 
+        textAlign: 'right',
+        marginHorizontal: 10,
         flex: 1
     },
     line: {
