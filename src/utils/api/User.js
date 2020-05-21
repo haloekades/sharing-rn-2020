@@ -28,3 +28,20 @@ export const getUserTask = async (status = null) => {
 
     return response;
 }
+
+export const getUserApproval = async (status = null) => {
+    let url = `${API.LIST_TASK}type=approval`;
+
+    if (status != null) {
+        url += `&status=${status}`;
+    }
+
+    const option = {
+        method : "get",
+        url: url,
+    }
+
+    const response = await API_CALL(option);
+
+    return response;
+}

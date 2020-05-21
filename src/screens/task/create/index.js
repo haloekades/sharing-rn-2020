@@ -189,7 +189,8 @@ export default function CreateTask({ navigation, route }) {
             <SafeAreaView />
             <Header>
                 <Left style={styles.iconSide}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.goBack()}>
                         <Icon
                             type='AntDesign'
                             name='arrowleft'

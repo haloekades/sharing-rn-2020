@@ -71,7 +71,9 @@ export default function Home({ navigation }) {
             })
         } else if (textCard == 'Approval') {
             //goto approval
-
+            navigation.push('ApprovalList', {
+                status : status
+            })
         }
     }
 
@@ -96,10 +98,10 @@ export default function Home({ navigation }) {
         )
     }
 
-    function _renderItemTask(iconType, iconName, color, title, total, status = null) {
+    function _renderItemTask(iconType, iconName, color, title, total, type, status = null) {
         return (
             <TouchableOpacity 
-                onPress={() => onCLickCard('My Task', status)}
+                onPress={() => onCLickCard(type, status)}
                 style={[styles.viewTotalTask, styles.line]}>
                 <Icon type={iconType} name={iconName} style={{ color: color }} />
                 <Text>{title}</Text>
@@ -154,9 +156,9 @@ export default function Home({ navigation }) {
                         <CardItem>
                             <View style={{ flexDirection: 'column', flex: 1 }}>
                                 <Text style={styles.titleCardTask}>My Task</Text>
-                                {_renderItemTask('Octicons', 'primitive-dot', 'orange', 'PENDING', task.pending, 'W')}
-                                {_renderItemTask('Octicons', 'primitive-dot', 'green', 'APPROVED', task.approved, 'A')}
-                                {_renderItemTask('Octicons', 'primitive-dot', 'red', 'REJECTED', task.rejected, 'R')}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'orange', 'PENDING', task.pending, 'My Task', 'W')}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'green', 'APPROVED', task.approved, 'My Task', 'A')}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'red', 'REJECTED', task.rejected, 'My Task', 'R')}
                             </View>
                         </CardItem>
                     </Card>
@@ -167,9 +169,9 @@ export default function Home({ navigation }) {
                         <CardItem>
                             <View style={{ flexDirection: 'column', flex: 1 }}>
                                 <Text style={styles.titleCardTask}>Approval</Text>
-                                {_renderItemTask('Octicons', 'primitive-dot', 'orange', 'PENDING', approval.pending)}
-                                {_renderItemTask('Octicons', 'primitive-dot', 'green', 'APPROVED', approval.approved)}
-                                {_renderItemTask('Octicons', 'primitive-dot', 'red', 'REJECTED', approval.rejected)}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'orange', 'PENDING', approval.pending, 'Approval', 'W')}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'green', 'APPROVED', approval.approved, 'Approval', 'A')}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'red', 'REJECTED', approval.rejected, 'Approval', 'R')}
                             </View>
                         </CardItem>
                     </Card>
