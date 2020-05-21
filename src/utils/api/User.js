@@ -11,3 +11,20 @@ export const getUser = async () =>{
 
     return response
 }
+
+export const getUserTask = async (status = null) => {
+    let url = `${API.LIST_TASK}type=task`;
+
+    if (status != null) {
+        url += `&status=${status}`;
+    }
+
+    const option = {
+        method : "get",
+        url: url,
+    }
+
+    const response = await API_CALL(option);
+
+    return response;
+}

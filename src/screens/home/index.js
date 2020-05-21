@@ -66,7 +66,9 @@ export default function Home({ navigation }) {
 
         } else if (textCard == 'My Task') {
             //goto my task
-
+            navigation.push('TaskList', {
+                status : null
+            })
         } else if (textCard == 'Approval') {
             //goto approval
 
