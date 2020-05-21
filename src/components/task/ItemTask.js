@@ -42,7 +42,7 @@ export default class ItemTask extends Component {
                             <Text style={styles.dateStatus}>{shownDateStatus}</Text>
                             <View style={[styles.viewReverse, { marginTop: 5 }]}>
                                 {(status == 'A' || status == 'R') && 
-                                    <Text style={{ fontSize: 12 }}>{response_user_name}</Text>
+                                    <Text style={{ fontSize: 12 }}>by : {response_user_name}</Text>
                                 }
 
                                 <Text style={styles.category}>{category}</Text>
