@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleProvider, Root } from "native-base";
-import { Splash, LoginForm, CreateTask, TaskList } from "./src/screens";
+import { Splash, LoginForm, CreateTask, TaskList, ApprovalList } from "./src/screens";
 import getTheme from './src/theme/components';
 import color from './src/theme/variables/myColor';
 import { MainNav } from './src/routes/MainRoutes'
@@ -25,6 +25,7 @@ function App() {
             <StackApp.Screen name="MainApp" component={MainNav} />
             <StackApp.Screen name="CreateTask" component={CreateTask} />
             <StackApp.Screen name="TaskList" component={TaskList} />
+            <StackApp.Screen name="ApprovalList" component={ApprovalList} />
           </StackApp.Navigator>
         </NavigationContainer>
       </Root>
