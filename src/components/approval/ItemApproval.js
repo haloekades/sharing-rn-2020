@@ -1,94 +1,56 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Card, CardItem } from 'native-base';
+import { Card } from 'native-base';
 import moment from 'moment';
 
-export default class ItemTask extends Component {
+export default class ItemApproval extends Component {
     constructor(props) {
         super(props);
     }
 
     render() {
-        let { 
-            id, name, description, request_date, category, assign_user, 
-            assign_user_name, response_date, response_message, response_user, 
-            response_user_name, status
-        } = this.props.data;
+        let bgStatus = this.props.data.status == 'A' ? 'green' : this.props.data.status == 'R' ? 'red' : 'orange';
+        let shownRequestDate = moment(this.props.data.request_date).utc().format("DD MMM YYYY")
 
-        let dayRequest      = moment(request_date).utc().format('DD');
-        let monthRequest    = moment(request_date).utc().format('MMM');
-        let bgStatus        = status == 'A' ? 'green' : (status == 'R' ? 'red' : 'orange');
-        let shownRequestDate = status == 'A' || status == 'R' ? moment(request_date).utc().format('DD MMM YYYY') : '';
-        
         return (
-            <Card>
-                <CardItem>
-                    <TouchableOpacity style={{ flexDirection: 'row'}}>
-                        <View style={{ flex: 1 }}>
-                            <View style={[styles.viewReverse, { backgroundColor: bgStatus, borderRadius: 5, padding: 5, paddingHorizontal: 10 }]}>
-                                <Text style={[styles.textStatus, { color: '#FFFFFF' }]}>{status}</Text>
-                                <Text style={[styles.taskName, { color: '#FFFFFF' }]}>{assign_user_name}</Text>
-                            </View> 
-                            <View style={[{ flex: 1, padding: 10 }]}>
-                                <Text style={styles.taskName}>{name}</Text>
-                                <View style={{ flex: 1, flexDirection: 'row', marginTop: 10  }}>
-                                    <Text style={styles.category}>{category}</Text>
-                                    <Text style={{ flex: 1, textAlign: 'right'}}>{shownRequestDate}</Text>
-                                </View>
+            <Card style={{ marginTop: 10, marginVertical: 5 }}>
+                <TouchableOpacity onPress={() => this.onClickItem(this.props.data)} style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 1, }}>
+                        <View style={[styles.viewReverse, { backgroundColor: bgStatus, }]}>
+                            <Text style={{ fontSize: 12, color: 'white' }}>{this.props.data.status}</Text>
+                            <Text style={[styles.textNameRequest, { color: 'white' }]}>{this.props.data.assign_user_name}</Text>
+                        </View>
+                        <View style={{ flex: 1, padding: 10 }}>
+                            <Text style={styles.textNameRequest}>{this.props.data.name}</Text>
+                            <View style={{ flex: 1, flexDirection: 'row', marginTop: 10  }}>
+                                <Text style={styles.textCategory}>{this.props.data.category}</Text>
+                                <Text style={{ flex: 1, textAlign: 'right'}}>{shownRequestDate}</Text>
                             </View>
                         </View>
-                    </TouchableOpacity>
-                </CardItem>
+                    </View>
+                </TouchableOpacity>
             </Card>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    viewDate: {
-        backgroundColor: '#1f8cdd',
-        padding: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 5,
-        flex: 1,
-        marginRight: 10
-    },
-    viewDateDay: {
-        fontSize: 16, 
-        color: '#FFFFFF'
-    },
-    viewDateMonth: {
-        fontSize: 12,
-        color: '#FFFFFF'
-    },
     viewReverse: {
         flex: 1,
-        flexDirection: 'row-reverse'
+        flexDirection: 'row-reverse',
+        padding: 10,
+        alignItems: 'center',
+        borderTopStartRadius: 3,
+        borderTopEndRadius: 3,
     },
-    viewStatus: {
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 5
-    },
-    textStatus: {
-        fontSize: 14,
-        color: '#FFFFFF'
-    },
-    dateStatus: {
-        fontSize: 12,
-        marginTop: 5,
-        alignSelf: 'flex-end'
-    },
-    category: {
-        fontSize: 12,
-        fontWeight: 'bold',
-        flex: 1,
-        color: '#515456'
-    },
-    taskName: {
+    textNameRequest: {
         fontSize: 16,
         fontWeight: 'bold',
         flex: 1
+    },
+    textCategory: {
+        fontWeight: 'bold',
+        flex: 1,
+        color: '#515456'
     }
 })
