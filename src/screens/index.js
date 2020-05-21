@@ -6,3 +6,4 @@ export { default as Profile } from './profile';
 export { default as CreateTask } from './task/create';
 export { default as TaskList } from './task/list';
 export { default as ApprovalList } from './approval/list';
+export { default as TaskDetail } from './task/detail';

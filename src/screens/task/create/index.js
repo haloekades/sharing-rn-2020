@@ -8,6 +8,8 @@ const { height: heightDevice } = Dimensions.get('window');
 
 
 export default function CreateTask({ navigation, route }) {
+    const [id, setId] = useState(0)
+    const [title, setTitle] = useState('Create Task')
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
@@ -17,6 +19,28 @@ export default function CreateTask({ navigation, route }) {
     const [errorCategory, setErrorCategory] = useState(false)
     const [errorDate, setErrorDate] = useState(false)
     const [categoryDescription, setCategoryDescription] = useState('')
+
+    useEffect(() => {
+        let { params } = route;
+
+        if (params != null && params.data) {
+            setId(params.data.id)
+            setTitle("Edit Task")
+            setName(params.data.name)
+            setDataCategory(params.data.category)
+            setDate(moment(params.data.request_date).utc())
+            setDescription(params.data.description)
+        }
+    }, [])
+
+    function setDataCategory(extraCategory) {
+        let category = categoryList.find(data => data.key == extraCategory)
+
+        if (category != null) {
+            setCategory(category.key)
+            setCategoryDescription(category.description)
+        }
+    }
 
     const categoryList = [
         {
@@ -150,7 +174,7 @@ export default function CreateTask({ navigation, route }) {
             let responseUserId = profile.leaderId > 0 ? profile.leaderId : profile.Dimensions
 
             let params = {
-                id: 0,
+                id: id,
                 name: name,
                 description: description,
                 request_date: moment(date).format('YYYY-MM-DD'),
@@ -168,8 +192,8 @@ export default function CreateTask({ navigation, route }) {
                     duration: 1000
                 })
 
-                if(route.params != null && route.params.isUpdated != null){
-                    route.params.isUpdated(true)
+                if (route.params != null && route.params.isUpdateData != null) {
+                    route.params.isUpdateData(true)
                 }
 
                 navigation.goBack();
@@ -198,7 +222,7 @@ export default function CreateTask({ navigation, route }) {
                     </TouchableOpacity>
                 </Left>
                 <Body style={styles.iconBody}>
-                    <Title>Create Task</Title>
+                    <Title>{title}</Title>
                 </Body>
                 <Right style={styles.iconSide} />
             </Header>
@@ -231,7 +255,9 @@ export default function CreateTask({ navigation, route }) {
                                 formatChosenDate={date => {
                                     return moment(date).format("DD MMM YYYY")
                                 }}
-                                placeHolderText={'Input Date'}
+                                placeHolderText={ date != null ?
+                                    moment(date).format('DD MMM YYYY') :
+                                    'Input Date'}
                                 placeHolderTextStyle={{ color: '#d3d3d3' }}
                                 onDateChange={onSelectedDate}
                             />

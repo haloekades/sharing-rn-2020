@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Card, CardItem } from 'native-base';
 import moment from 'moment';
+import { timing } from 'react-native-reanimated';
 
 export default class ItemTask extends Component {
     constructor(props) {
@@ -9,21 +10,23 @@ export default class ItemTask extends Component {
     }
 
     render() {
-        let { 
-            id, name, description, request_date, category, assign_user, 
-            assign_user_name, response_date, response_message, response_user, 
+        let {
+            id, name, description, request_date, category, assign_user,
+            assign_user_name, response_date, response_message, response_user,
             response_user_name, status
         } = this.props.data;
 
-        let dayRequest      = moment(request_date).utc().format('DD');
-        let monthRequest    = moment(request_date).utc().format('MMM');
-        let bgStatus        = status == 'A' ? 'green' : (status == 'R' ? 'red' : 'orange');
+        let dayRequest = moment(request_date).utc().format('DD');
+        let monthRequest = moment(request_date).utc().format('MMM');
+        let bgStatus = status == 'A' ? 'green' : (status == 'R' ? 'red' : 'orange');
         let shownDateStatus = status == 'A' || status == 'R' ? moment(response_date).utc().format('DD MMM YYYY') : '';
-        
+
         return (
             <Card>
                 <CardItem>
-                    <TouchableOpacity style={{ flexDirection: 'row'}}>
+                    <TouchableOpacity
+                        onPress={() => this.props.onClickItem(this.props.data)}
+                        style={{ flexDirection: 'row' }}>
                         <View style={{ flex: 0.2 }}>
                             <View style={styles.viewDate}>
                                 <Text style={styles.viewDateDay}>{dayRequest}</Text>
@@ -41,7 +44,7 @@ export default class ItemTask extends Component {
                             </View>
                             <Text style={styles.dateStatus}>{shownDateStatus}</Text>
                             <View style={[styles.viewReverse, { marginTop: 5 }]}>
-                                {(status == 'A' || status == 'R') && 
+                                {(status == 'A' || status == 'R') &&
                                     <Text style={{ fontSize: 12 }}>by : {response_user_name}</Text>
                                 }
 
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     viewDateDay: {
-        fontSize: 16, 
+        fontSize: 16,
         color: '#FFFFFF'
     },
     viewDateMonth: {

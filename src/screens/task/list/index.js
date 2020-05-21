@@ -8,9 +8,25 @@ export default function TaskList({ navigation, route }) {
     const [taskList, setTaskList]   = useState([]);
     const [status, setStatus]       = useState(null);
 
+
+    function gotoTaskDetail(data) {
+        if(data != null){
+            navigation.push('TaskDetail', {
+                data : data,
+                isUpdateData : onUpdateData
+            })
+        }
+    }
+
+    function onUpdateData(isUpadated){
+        if(isUpadated == true){
+            doGetUserTask(status)
+        }
+    }
+
     function _renderItem({ item }) {
         return (
-            <ItemTask data={item} />
+            <ItemTask data={item} onClickItem={gotoTaskDetail}/>
         )
     }
 
@@ -24,7 +40,7 @@ export default function TaskList({ navigation, route }) {
             doGetUserTask(null);
             setStatus(null);
         }
-    })
+    }, [])
 
     async function doGetUserTask(status = null) {
         let { acknowledge, result, message } = await getUserTask(status);

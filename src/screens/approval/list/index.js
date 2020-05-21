@@ -24,7 +24,7 @@ export default function TaskApproval({ navigation, route }) {
             doGetUserApproval(null);
             setStatus(null);
         }
-    })
+    }, [])
 
     async function doGetUserApproval(status = null) {
         let { acknowledge, result, message } = await getUserApproval(status);
@@ -54,12 +54,12 @@ export default function TaskApproval({ navigation, route }) {
                 </Body>
                 <Right style={styles.iconSide} />
             </Header>
-            <Content style={{ padding: 10 }}>
+            {/* <Content style={{ padding: 10 }}> */}
                 <FlatList
                     style={styles.flatList}
                     data={approvalList}
                     renderItem={_renderItem} />
-            </Content>
+            {/* </Content> */}
         </Container>
     )
 }
