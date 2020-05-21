@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleProvider, Root } from "native-base";
-import { Splash, LoginForm, CreateTask } from "./src/screens";
+import { Splash, LoginForm, CreateTask, TaskDetail, ApprovalDetail } from "./src/screens";
 import getTheme from './src/theme/components';
 import color from './src/theme/variables/myColor';
 import { MainNav } from './src/routes/MainRoutes'
@@ -16,7 +16,7 @@ function App() {
     <StyleProvider style={getTheme(color)}>
       <Root>
         <NavigationContainer>
-          <StackApp.Navigator initialRouteName="Splash"
+          <StackApp.Navigator initialRouteName="TaskDetail"
             screenOptions={{
               headerShown: false
             }}>
@@ -24,6 +24,8 @@ function App() {
             <StackApp.Screen name="Login" component={LoginForm} />
             <StackApp.Screen name="MainApp" component={MainNav} />
             <StackApp.Screen name="CreateTask" component={CreateTask} />
+            <StackApp.Screen name="TaskDetail" component={TaskDetail} />
+            <StackApp.Screen name="ApprovalDetail" component={ApprovalDetail} />
           </StackApp.Navigator>
         </NavigationContainer>
       </Root>
