@@ -14,7 +14,9 @@ export default class ItemApproval extends Component {
 
         return (
             <Card style={{ marginTop: 10, marginVertical: 5 }}>
-                <TouchableOpacity onPress={() => this.onClickItem(this.props.data)} style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                    onPress={() => this.props.onClickItem(this.props.data)}
+                    style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1, }}>
                         <View style={[styles.viewReverse, { backgroundColor: bgStatus, }]}>
                             <Text style={{ fontSize: 12, color: 'white' }}>{this.props.data.status}</Text>
@@ -22,9 +24,9 @@ export default class ItemApproval extends Component {
                         </View>
                         <View style={{ flex: 1, padding: 10 }}>
                             <Text style={styles.textNameRequest}>{this.props.data.name}</Text>
-                            <View style={{ flex: 1, flexDirection: 'row', marginTop: 10  }}>
+                            <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
                                 <Text style={styles.textCategory}>{this.props.data.category}</Text>
-                                <Text style={{ flex: 1, textAlign: 'right'}}>{shownRequestDate}</Text>
+                                <Text style={{ flex: 1, textAlign: 'right' }}>{shownRequestDate}</Text>
                             </View>
                         </View>
                     </View>

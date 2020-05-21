@@ -8,9 +8,25 @@ export default function TaskApproval({ navigation, route }) {
     const [approvalList, setApprovalList]   = useState([]);
     const [status, setStatus]       = useState(null);
 
+
+    function gotoApproval(data){
+        if(data != null){
+            navigation.push('ApprovalDetail', {
+                data : data,
+                isUpdatedData : onUpdateData
+            })
+        }
+    }
+
+    function onUpdateData(isUpdated){
+        if(isUpdated == true){
+            doGetUserApproval(status)
+        }
+    }
+
     function _renderItem({ item }) {
         return (
-            <ItemApproval data={item} />
+            <ItemApproval data={item} onClickItem={gotoApproval}/>
         )
     }
 

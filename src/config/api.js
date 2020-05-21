@@ -3,5 +3,7 @@ export const API = {
     LOGIN: `/1.0/user/login`,
     USER: `/1.0/user/profile`,
     CREATE_TASK: `/1.0/task`,
-    LIST_TASK: `1.0/task?`
+    LIST_TASK: `1.0/task?`,
+    APPROVED: `/1.0/approval/approve`,
+    REJECTED: `/1.0/approval/reject`,
 }

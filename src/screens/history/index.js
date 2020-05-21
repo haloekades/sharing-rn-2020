@@ -107,9 +107,24 @@ export default function History({ navigation }) {
         )
     }
 
+    function gotoApproval(data){
+        if(data != null){
+            navigation.push('ApprovalDetail', {
+                data : data,
+                isUpdatedData : onUpdateData
+            })
+        }
+    }
+
+    function onUpdateData(isUpdated){
+        if(isUpdated == true){
+            doGetUserApproval(status)
+        }
+    }
+
     function renderItemApproval({ item }) {
         return (
-            <ItemApproval data={item} />
+            <ItemApproval data={item} onClickItem={gotoApproval} />
         )
     }
 
