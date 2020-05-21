@@ -56,7 +56,7 @@ export default function Home({ navigation }) {
         doGetProfile();
     }
 
-    function onCLickCard(textCard) {
+    function onCLickCard(textCard, status) {
         if (textCard == 'Create') {
             //goto create task
             // navigation.navigate('CreateTask')
@@ -67,7 +67,7 @@ export default function Home({ navigation }) {
         } else if (textCard == 'My Task') {
             //goto my task
             navigation.push('TaskList', {
-                status : null
+                status : status
             })
         } else if (textCard == 'Approval') {
             //goto approval
@@ -81,12 +81,12 @@ export default function Home({ navigation }) {
         }
     }
 
-    function _renderIconWithText(iconType, iconName, text) {
+    function _renderIconWithText(iconType, iconName, text, status = null) {
         return (
             <Card style={styles.cardButton}>
                 <CardItem style={{ flex: 1 }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}
-                    onPress={() => onCLickCard(text)}
+                    onPress={() => onCLickCard(text, status)}
                     style={styles.btnTask}>
                         <Icon type={iconType} name={iconName} style={styles.iconTask} />
                         <Text style={styles.textTask}>{text}</Text>
@@ -96,9 +96,11 @@ export default function Home({ navigation }) {
         )
     }
 
-    function _renderItemTask(iconType, iconName, color, title, total) {
+    function _renderItemTask(iconType, iconName, color, title, total, status = null) {
         return (
-            <TouchableOpacity style={[styles.viewTotalTask, styles.line]}>
+            <TouchableOpacity 
+                onPress={() => onCLickCard('My Task', status)}
+                style={[styles.viewTotalTask, styles.line]}>
                 <Icon type={iconType} name={iconName} style={{ color: color }} />
                 <Text>{title}</Text>
                 <Text style={styles.textTotalTask}>{total}</Text>
@@ -152,9 +154,9 @@ export default function Home({ navigation }) {
                         <CardItem>
                             <View style={{ flexDirection: 'column', flex: 1 }}>
                                 <Text style={styles.titleCardTask}>My Task</Text>
-                                {_renderItemTask('Octicons', 'primitive-dot', 'orange', 'PENDING', task.pending)}
-                                {_renderItemTask('Octicons', 'primitive-dot', 'green', 'APPROVED', task.approved)}
-                                {_renderItemTask('Octicons', 'primitive-dot', 'red', 'REJECTED', task.rejected)}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'orange', 'PENDING', task.pending, 'W')}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'green', 'APPROVED', task.approved, 'A')}
+                                {_renderItemTask('Octicons', 'primitive-dot', 'red', 'REJECTED', task.rejected, 'R')}
                             </View>
                         </CardItem>
                     </Card>
